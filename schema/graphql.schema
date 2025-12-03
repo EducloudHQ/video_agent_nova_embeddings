@@ -1,0 +1,10 @@
+schema {
+  query: Query
+
+}
+
+type Query {
+  
+  retrieveGenerateResponse(text: String!): String! 
+}
+

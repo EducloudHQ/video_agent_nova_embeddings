@@ -1,7 +1,16 @@
-*.js
+.venv
+.idea
+.vscode
+.DS_Store
 !jest.config.js
 *.d.ts
 node_modules
+# YAML files
+*.yaml
+
+# Python bytecode caches
+__pycache__/
+**/__pycache__/
 
 # CDK asset staging directory
 .cdk.staging
