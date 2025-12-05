@@ -130,8 +130,8 @@ export class AppSyncConstruct extends Construct {
     this.knowledgeBase.node.addDependency(vectorBucket);
 
     // Create data source for knowledge base
-    this.customDs = new bedrock.CfnDataSource(this, "custom-data-source", {
-      name: "custom-data-source",
+    this.customDs = new bedrock.CfnDataSource(this, "video-custom-data-source", {
+      name: "video-custom-data-source",
       knowledgeBaseId: this.knowledgeBase.knowledgeBaseId,
       dataSourceConfiguration: {
         type: "CUSTOM",
@@ -345,7 +345,7 @@ export class AppSyncConstruct extends Construct {
 
 
     // Create a resolver for retrieving and generating responses
-    this.api.createResolver("RetrieveAndGenerateResponseResolver", {
+    this.api.createResolver("RetrieveAndGenerateResponse", {
       typeName: "Mutation",
       fieldName: "retrieveAndGenerateResponse",
       dataSource: bedrockRetrieveAndGenerateDS,
@@ -353,6 +353,12 @@ export class AppSyncConstruct extends Construct {
       code: appsync.Code.fromAsset(
         path.join(__dirname, "../resolvers/retrieveAndGenerateResponse.js")
       ),
+    });
+
+    //export graphq api endpoint
+    new cdk.CfnOutput(this, "GraphQLAPIEndpoint", {
+      value: this.api.graphqlUrl,
+      description: " The GraphQL API Endpoint",
     });
   
 

@@ -1,10 +1,15 @@
 schema {
-  query: Query
+  mutation: Mutation
+  query:Query
 
 }
 
 type Query {
+  testQuery: String
+}
+
+type Mutation {
   
-  retrieveGenerateResponse(text: String!): String! 
+  retrieveAndGenerateResponse(text: String!): String! 
 }
 
