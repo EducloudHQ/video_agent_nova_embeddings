@@ -321,6 +321,14 @@ export class AppSyncConstruct extends Construct {
     );
 
     this.mediaBucket.grantReadWrite(this.invokeWorkflowFunction);
+    this.invokeWorkflowFunction.addToRolePolicy(
+      new iam.PolicyStatement({
+        actions: ["states:StartExecution","states:DescribeExecution"],
+        resources: [this.generateEmbeddingsStateMachine.stateMachineArn],
+        effect: iam.Effect.ALLOW,
+      })
+    );
+   
     const kbDataAccessRole = this.knowledgeBase.role;
     this.mediaBucket.grantRead(kbDataAccessRole);
     this.knowledgeBase.grantIngestion(this.saveEmbeddingsFunction);

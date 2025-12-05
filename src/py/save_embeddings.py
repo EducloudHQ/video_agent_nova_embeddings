@@ -133,6 +133,7 @@ def lambda_handler(event, context):
     """
     Expects event: { "prefix": "path/to/jsonl/files/" }
     """
+    logger.info("events {event}")
     prefix = event.get('prefix', '')
     
     logger.info("--- Starting Vector Ingestion Job ---")
@@ -143,29 +144,3 @@ def lambda_handler(event, context):
     # ensure_vector_infrastructure()
 
     # 2. List JSONL files in Source Bucket
-    try:
-        paginator = s3_client.get_paginator('list_objects_v2')
-        page_iterator = paginator.paginate(Bucket=SOURCE_BUCKET, Prefix=prefix)
-
-        file_count = 0
-        for page in page_iterator:
-            if 'Contents' not in page:
-                continue
-                
-            for obj in page['Contents']:
-                key = obj['Key']
-                if key.endswith('.jsonl'):
-                    process_jsonl_file(key)
-                    file_count += 1
-        
-        return {
-            'statusCode': 200,
-            'body': json.dumps(f"Processed {file_count} files successfully.")
-        }
-
-    except Exception as e:
-        logger.error(f"Fatal error in execution: {e}")
-        return {
-            'statusCode': 500,
-            'body': json.dumps(str(e))
-        }
