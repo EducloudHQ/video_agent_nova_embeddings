@@ -57,7 +57,7 @@ export class AppSyncConstruct extends Construct {
      // Load the ASL definitions for the state machines
     const aslGenerateEmbeddingsFilePath = path.join(
       __dirname,
-      "../../workflow/generate_embeddings.asl.json"
+      "../workflow/generate_embeddings.asl.json"
     );
     const generateEmbeddingsDefinitionJson = JSON.parse(
       readFileSync(aslGenerateEmbeddingsFilePath, "utf8")
@@ -245,7 +245,7 @@ export class AppSyncConstruct extends Construct {
       {
         stateMachineName: "GenerateEmbeddingsStateMachine",
         role: stateMachineRole,
-        definitionBody: generateEmbeddingsDefinitionJson,
+        definitionBody: sfn.DefinitionBody.fromFile(path.join(__dirname, "../workflow/generate_embeddings.asl.json")),
 
         definitionSubstitutions: {
           FUNCTION_ARN: this.saveEmbeddingsFunction.functionArn,
@@ -275,8 +275,33 @@ export class AppSyncConstruct extends Construct {
       })
     );
 
+    this.invokeWorkflowFunction = new NodejsFunction(
+      this,
+      "invokeWorkflowFunction",
+      {
+        entry: path.join(
+          __dirname,
+          "../src/ts/invokeWorkflowFunction.ts"
+        ),
+        handler: "handler",
+        runtime: lambda.Runtime.NODEJS_22_X,
+        memorySize: 256,
+        logGroup: workflowFunctionLogs,
+        tracing: lambda.Tracing.ACTIVE,
+        environment: {
+          STATE_MACHINE_ARN:this.generateEmbeddingsStateMachine.stateMachineArn,
+           SOURCE_BUCKET_NAME: this.mediaBucket.bucketName,
+         
+          
+        },
+        bundling: {
+          minify: true,
+        },
+      }
+    );
+
   
-     // Configure the S3 bucket to trigger the Lambda function when files are uploaded to the uploads/ path
+     // Configure the S3 bucket to trigger the Lambda function when files are uploaded to the videos/ path
     this.mediaBucket.addEventNotification(
       s3.EventType.OBJECT_CREATED,
       new s3n.LambdaDestination(this.invokeWorkflowFunction),
@@ -305,30 +330,7 @@ export class AppSyncConstruct extends Construct {
 
   
   
-    this.invokeWorkflowFunction = new NodejsFunction(
-      this,
-      "invokeWorkflowFunction",
-      {
-        entry: path.join(
-          __dirname,
-          "../../src/ts/invokeWorkflowFunction.ts"
-        ),
-        handler: "handler",
-        runtime: lambda.Runtime.NODEJS_20_X,
-        memorySize: 256,
-        logGroup: workflowFunctionLogs,
-        tracing: lambda.Tracing.ACTIVE,
-        environment: {
-          STATE_MACHINE_ARN:this.generateEmbeddingsStateMachine.stateMachineArn,
-           SOURCE_BUCKET_NAME: this.mediaBucket.bucketName,
-         
-          
-        },
-        bundling: {
-          minify: true,
-        },
-      }
-    );
+
 
      this.api.addEnvironmentVariable(
       "FOUNDATION_MODEL_ARN",
@@ -348,7 +350,7 @@ export class AppSyncConstruct extends Construct {
       dataSource: bedrockRetrieveAndGenerateDS,
       runtime: appsync.FunctionRuntime.JS_1_0_0,
       code: appsync.Code.fromAsset(
-        path.join(__dirname, "../../resolvers/retrieveAndGenerateResponse.js")
+        path.join(__dirname, "../resolvers/retrieveAndGenerateResponse.js")
       ),
     });
   

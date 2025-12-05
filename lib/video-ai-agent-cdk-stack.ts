@@ -1,16 +1,12 @@
 import * as cdk from 'aws-cdk-lib/core';
 import { Construct } from 'constructs';
+import { AppSyncConstruct } from './appsync-construct';
 // import * as sqs from 'aws-cdk-lib/aws-sqs';
 
 export class VideoAiAgentCdkStack extends cdk.Stack {
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    // The code that defines your stack goes here
-
-    // example resource
-    // const queue = new sqs.Queue(this, 'VideoAiAgentCdkQueue', {
-    //   visibilityTimeout: cdk.Duration.seconds(300)
-    // });
+    new AppSyncConstruct(this, "AppSyncConstruct",{});
   }
 }
