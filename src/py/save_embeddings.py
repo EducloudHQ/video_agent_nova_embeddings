@@ -140,7 +140,7 @@ def lambda_handler(event, context):
     logger.info(f"Target Vector Index: {VECTOR_INDEX_NAME}")
 
     # 1. Ensure Infrastructure Exists
-    ensure_vector_infrastructure()
+    # ensure_vector_infrastructure()
 
     # 2. List JSONL files in Source Bucket
     try:

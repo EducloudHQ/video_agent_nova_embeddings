@@ -291,6 +291,7 @@ export class AppSyncConstruct extends Construct {
         environment: {
           STATE_MACHINE_ARN:this.generateEmbeddingsStateMachine.stateMachineArn,
            SOURCE_BUCKET_NAME: this.mediaBucket.bucketName,
+          
          
           
         },

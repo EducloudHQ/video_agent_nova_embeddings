@@ -1,4 +1,4 @@
-import { AppSyncResolverHandler } from "aws-lambda";
+
 import { SFNClient, StartExecutionCommand } from "@aws-sdk/client-sfn";
 
 import { logger, metrics, tracer } from "./powertools/utilities";
@@ -8,6 +8,7 @@ export const handler = async (event: any, _context: any) => {
 
   const generateEmbeddingsSMArn =
     process.env.STATE_MACHINE_ARN;
+    const bucketName = process.env.SOURCE_BUCKET_NAME;
 
   if (!generateEmbeddingsSMArn) {
     logger.error("STATE_MACHINE_ARN is not configured.");
@@ -17,15 +18,19 @@ export const handler = async (event: any, _context: any) => {
   const client = new SFNClient({});
 
   for (const record of event.Records) {
-    const bucket = record.s3.bucket.name;
-    const key = decodeURIComponent(record.s3.object.key.replace(/\+/g, " "));
+    // the mediaBucketUri and mediaBucket should be similar to these
+     // "mediaBucket": "s3://s3-features-source-132260253285",
+  //"mediaFileUri": "s3://s3-features-source-132260253285/NetflixMeridian.mp4"
     
+    const key = decodeURIComponent(record.s3.object.key.replace(/\+/g, " "));
+    const mediaFileUri = `s3://${bucketName}/${record.s3.object.key}`;
+    const mediaBucket = `s3://${bucketName}`;
     const input = JSON.stringify({ 
-      bucket,
-      key
+     mediaBucket:mediaBucket,
+     mediaFileUri:mediaFileUri
     });
 
-    logger.info(`Starting Step Functions execution for ${bucket}/${key}`, { input });
+    logger.info(`Starting Step Functions execution for ${bucketName}/${key}`, { input });
 
     try {
       const command = new StartExecutionCommand({
@@ -33,9 +38,9 @@ export const handler = async (event: any, _context: any) => {
         input: input,
       });
       await client.send(command);
-      logger.info(`Successfully started execution for ${bucket}/${key}`);
+      logger.info(`Successfully started execution for ${bucketName}/${key}`);
     } catch (error: any) {
-      logger.error("Error starting Step Functions execution", { error, bucket, key });
+      logger.error("Error starting Step Functions execution", { error, bucketName, key });
       // Continue processing other records even if one fails
     }
   }
