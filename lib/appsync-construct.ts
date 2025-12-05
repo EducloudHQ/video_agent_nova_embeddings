@@ -64,10 +64,10 @@ export class AppSyncConstruct extends Construct {
     );
 
     // Create an S3 bucket for storing generated videos and thumbnails
-    this.mediaBucket = new s3.Bucket(this, "MediaBucket", {
+    this.mediaBucket = new s3.Bucket(this, "VideoMediaBucket", {
       bucketName: `${cdk.Stack.of(this).account}-${
         cdk.Stack.of(this).region
-      }-scheduled-posts-media`,
+      }-video-media-bucket`,
       removalPolicy: cdk.RemovalPolicy.RETAIN,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       encryption: s3.BucketEncryption.S3_MANAGED,
