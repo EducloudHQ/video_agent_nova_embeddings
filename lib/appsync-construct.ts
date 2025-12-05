@@ -275,6 +275,15 @@ export class AppSyncConstruct extends Construct {
       })
     );
 
+    // Grant permission to invoke bedrock nova embeddings
+    stateMachineRole.addToPolicy(
+      new iam.PolicyStatement({
+        actions: ["bedrock:InvokeModel","bedrock:startAsyncInvoke","bedrock:getAsyncInvoke"],
+        resources: [BEDROCK_MODELS.NOVA_MULTIMODAL_EMBEDDINGS],
+        effect: iam.Effect.ALLOW,
+      })
+    );
+
     this.invokeWorkflowFunction = new NodejsFunction(
       this,
       "invokeWorkflowFunction",
