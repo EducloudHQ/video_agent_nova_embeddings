@@ -208,7 +208,7 @@ export class AppSyncConstruct extends Construct {
       "saveEmbeddingsFunction",
       {
         entry: "./src/py/",
-        handler: "saveEmbeddingsFunction",
+        handler: "lambda_handler",
         index: "save_embeddings.py",
         runtime: cdk.aws_lambda.Runtime.PYTHON_3_13,
         memorySize: 512,
@@ -279,7 +279,7 @@ export class AppSyncConstruct extends Construct {
     stateMachineRole.addToPolicy(
       new iam.PolicyStatement({
         actions: ["bedrock:InvokeModel","bedrock:startAsyncInvoke","bedrock:getAsyncInvoke"],
-        resources: [BEDROCK_MODELS.NOVA_MULTIMODAL_EMBEDDINGS],
+        resources: ["*"],
         effect: iam.Effect.ALLOW,
       })
     );
@@ -331,6 +331,7 @@ export class AppSyncConstruct extends Construct {
    
     const kbDataAccessRole = this.knowledgeBase.role;
     this.mediaBucket.grantRead(kbDataAccessRole);
+    
     this.knowledgeBase.grantIngestion(this.saveEmbeddingsFunction);
     this.saveEmbeddingsFunction.addToRolePolicy(
       new iam.PolicyStatement({
@@ -343,6 +344,12 @@ export class AppSyncConstruct extends Construct {
             cdk.Stack.of(this).account
           }:knowledge-base/${this.knowledgeBase.knowledgeBaseId}`,
         ],
+      })
+    );
+    this.saveEmbeddingsFunction.addToRolePolicy(
+      new iam.PolicyStatement({
+        actions: ["s3:GetObject", "s3:ListBucket"],
+        resources: [this.mediaBucket.bucketArn, `${this.mediaBucket.bucketArn}/*`],
       })
     );
 

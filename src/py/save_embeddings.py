@@ -60,7 +60,7 @@ def process_jsonl_file(key):
     logger.info(f"Processing file: {key}")
     
     try:
-        response = s3_client.get_object(Bucket=SOURCE_BUCKET, Key=key)
+        response = s3_client.get_object(Bucket=SOURCE_BUCKET_NAME, Key=key)
         # Use line iteration on the streaming body to be memory efficient
         stream = response['Body'].iter_lines()
         
@@ -131,16 +131,62 @@ def flush_batch(batch):
 
 def lambda_handler(event, context):
     """
-    Expects event: { "prefix": "path/to/jsonl/files/" }
+    here's the event format: {
+  "ClientRequestToken": "0fcc4f66-637f-4740-aefb-175e522833a8",
+  "EndTime": "2025-12-05T18:08:52Z",
+  "InvocationArn": "arn:aws:bedrock:us-east-1:132260253285:async-invoke/quy2fplc31iw",
+  "LastModifiedTime": "2025-12-05T18:09:23Z",
+  "ModelArn": "arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-2-multimodal-embeddings-v1:0",
+  "OutputDataConfig": {
+    "S3OutputDataConfig": {
+      "S3Uri": "s3://132260253285-us-east-1-video-media-bucket/quy2fplc31iw"
+    }
+  },
+  "Status": "Completed",
+  "SubmitTime": "2025-12-05T18:08:22Z"
+}
     """
+    # Extract the prefix from the S3Uri in the event
+    s3_uri = event.get('OutputDataConfig', {}).get('S3OutputDataConfig', {}).get('S3Uri', '')
+    # S3Uri format: s3://bucket-name/prefix
+    # We split by '/' and take the last part
+    prefix = s3_uri.split('/')[-1] if s3_uri else ''
+
+
     logger.info("events {event}")
     prefix = event.get('prefix', '')
     
     logger.info("--- Starting Vector Ingestion Job ---")
-    logger.info(f"Source Bucket: {SOURCE_BUCKET}")
+    logger.info(f"Source Bucket: {SOURCE_BUCKET_NAME}")
     logger.info(f"Target Vector Index: {VECTOR_INDEX_NAME}")
 
     # 1. Ensure Infrastructure Exists
     # ensure_vector_infrastructure()
 
     # 2. List JSONL files in Source Bucket
+    try:
+        paginator = s3_client.get_paginator('list_objects_v2')
+        page_iterator = paginator.paginate(Bucket=SOURCE_BUCKET_NAME, Prefix=prefix)
+
+        file_count = 0
+        for page in page_iterator:
+            if 'Contents' not in page:
+                continue
+                
+            for obj in page['Contents']:
+                key = obj['Key']
+                if key.endswith('.jsonl'):
+                    process_jsonl_file(key)
+                    file_count += 1
+        
+        return {
+            'statusCode': 200,
+            'body': json.dumps(f"Processed {file_count} files successfully.")
+        }
+
+    except Exception as e:
+        logger.error(f"Fatal error in execution: {e}")
+        return {
+            'statusCode': 500,
+            'body': json.dumps(str(e))
+        }
