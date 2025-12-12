@@ -6,14 +6,12 @@ import * as lambda from "aws-cdk-lib/aws-lambda";
 import { NodejsFunction } from "aws-cdk-lib/aws-lambda-nodejs";
 import * as logs from "aws-cdk-lib/aws-logs";
 import * as path from "path";
-import * as scheduler from "aws-cdk-lib/aws-scheduler";
 import * as kms from "aws-cdk-lib/aws-kms";
 import * as bedrock from "aws-cdk-lib/aws-bedrock";
 import * as s3Vectors from "cdk-s3-vectors";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as s3n from "aws-cdk-lib/aws-s3-notifications";
 import * as sfn from "aws-cdk-lib/aws-stepfunctions";
-import * as cognito from "aws-cdk-lib/aws-cognito";
 
 
 import { PythonFunction } from "@aws-cdk/aws-lambda-python-alpha";
@@ -31,7 +29,6 @@ export class AppSyncConstruct extends Construct {
    * The AppSync GraphQL API
    */
   public readonly api: appsync.GraphqlApi;
-  public readonly knowledgeBase: s3Vectors.KnowledgeBase;
   public readonly customDs: bedrock.CfnDataSource;
   public readonly invokeWorkflowFunction: NodejsFunction;
   public readonly saveEmbeddingsFunction: NodejsFunction;
@@ -54,14 +51,7 @@ export class AppSyncConstruct extends Construct {
       enableKeyRotation: true,
     });
 
-     // Load the ASL definitions for the state machines
-    const aslGenerateEmbeddingsFilePath = path.join(
-      __dirname,
-      "../workflow/generate_embeddings.asl.json"
-    );
-    const generateEmbeddingsDefinitionJson = JSON.parse(
-      readFileSync(aslGenerateEmbeddingsFilePath, "utf8")
-    );
+   
 
     // Create an S3 bucket for storing generated videos and thumbnails
     this.mediaBucket = new s3.Bucket(this, "VideoMediaBucket", {
@@ -104,40 +94,8 @@ export class AppSyncConstruct extends Construct {
     // REQUIRED - add dependency for vector index
     vectorIndex.node.addDependency(vectorBucket);
 
-    // Create a knowledge base with all options
-    this.knowledgeBase = new s3Vectors.KnowledgeBase(
-      this,
-      "VideoAgentKnowledgeBase",
-      {
-        knowledgeBaseName: "video-agent-knowledge-base", // REQUIRED
-        vectorBucketArn: vectorBucket.vectorBucketArn, // REQUIRED
-        indexArn: vectorIndex.indexArn, // REQUIRED
-        // REQUIRED knowledge base configuration
-        knowledgeBaseConfiguration: {
-          embeddingModelArn:
-            "arn:aws:bedrock:us-east-1::foundation-model/amazon.titan-embed-text-v2:0", // REQUIRED
-          embeddingDataType: "FLOAT32", // Optional: 'BINARY' | 'FLOAT32'
-          dimensions: "1024", // Optional: dimensions as string
-        },
-        // Optional fields
-        description:
-          "Knowledge base for vector similarity search using S3 Vectors",
-        clientToken: "unique-client-token-12345678901234567890123456789012345", // Must be >= 33 characters
-      }
-    );
-    // REQUIRED - add dependencies for knowledge base
-    this.knowledgeBase.node.addDependency(vectorIndex);
-    this.knowledgeBase.node.addDependency(vectorBucket);
-
-    // Create data source for knowledge base
-    this.customDs = new bedrock.CfnDataSource(this, "video-custom-data-source", {
-      name: "video-custom-data-source",
-      knowledgeBaseId: this.knowledgeBase.knowledgeBaseId,
-      dataSourceConfiguration: {
-        type: "CUSTOM",
-      },
-    });
-
+  
+  
   
   
 
@@ -176,28 +134,33 @@ export class AppSyncConstruct extends Construct {
       }
     );
 
-    // Grant permissions to the Bedrock data source
-    bedrockRetrieveAndGenerateDS.grantPrincipal.addToPrincipalPolicy(
-      new iam.PolicyStatement({
-        resources: [
-          BEDROCK_MODELS.CLAUDE_3_5_SONNET,
-          `arn:aws:bedrock:us-east-1:${
-            cdk.Stack.of(this).account
-          }:knowledge-base/${this.knowledgeBase.knowledgeBaseId}`,
-        ],
-        actions: [
-          "bedrock:InvokeModel",
-          "bedrock:Retrieve",
-          "bedrock:RetrieveAndGenerate",
-        ],
-        effect: iam.Effect.ALLOW,
-      })
-    );
+   
   
     // dedicated log group (avoid logRetention deprecation)
     const workflowFunctionLogs = new logs.LogGroup(
       this,
       "workflowFunctionLogs",
+      {
+        retention: logs.RetentionDays.ONE_WEEK,
+      }
+    );
+     const embeddingsFunctionLogs = new logs.LogGroup(
+      this,
+      "embeddingsFunctionLogs",
+      {
+        retention: logs.RetentionDays.ONE_WEEK,
+      }
+    );
+     const invokeWorkflowFunctionLogs = new logs.LogGroup(
+      this,
+      "invokeWorkflowFunctionLogs",
+      {
+        retention: logs.RetentionDays.ONE_WEEK,
+      }
+    );
+         const searchFunctionLogs = new logs.LogGroup(
+      this,
+      "searchFunctionLogs",
       {
         retention: logs.RetentionDays.ONE_WEEK,
       }
@@ -213,13 +176,12 @@ export class AppSyncConstruct extends Construct {
         runtime: cdk.aws_lambda.Runtime.PYTHON_3_13,
         memorySize: 512,
         timeout: cdk.Duration.minutes(10),
-        logGroup: workflowFunctionLogs,
+        logGroup: embeddingsFunctionLogs,
         tracing: cdk.aws_lambda.Tracing.ACTIVE,
        
         environment: {
 
-          KNOWLEDGE_BASE_ID: this.knowledgeBase.knowledgeBaseId,
-          DATA_SOURCE_ID: this.customDs.attrDataSourceId,
+        
           VECTOR_BUCKET_NAME: vectorBucket.vectorBucketName,
           VECTOR_INDEX_NAME: vectorIndex.indexName,
           SOURCE_BUCKET_NAME: this.mediaBucket.bucketName,
@@ -295,14 +257,12 @@ export class AppSyncConstruct extends Construct {
         handler: "handler",
         runtime: lambda.Runtime.NODEJS_22_X,
         memorySize: 256,
-        logGroup: workflowFunctionLogs,
+        logGroup: invokeWorkflowFunctionLogs,
         tracing: lambda.Tracing.ACTIVE,
         environment: {
           STATE_MACHINE_ARN:this.generateEmbeddingsStateMachine.stateMachineArn,
            SOURCE_BUCKET_NAME: this.mediaBucket.bucketName,
-          
-         
-          
+
         },
         bundling: {
           minify: true,
@@ -329,23 +289,7 @@ export class AppSyncConstruct extends Construct {
       })
     );
    
-    const kbDataAccessRole = this.knowledgeBase.role;
-    this.mediaBucket.grantRead(kbDataAccessRole);
-    
-    this.knowledgeBase.grantIngestion(this.saveEmbeddingsFunction);
-    this.saveEmbeddingsFunction.addToRolePolicy(
-      new iam.PolicyStatement({
-        actions: [
-          "bedrock:IngestKnowledgeBaseDocuments",
-          "bedrock:GetKnowledgeBaseDocuments",
-        ],
-        resources: [
-          `arn:aws:bedrock:${cdk.Stack.of(this).region}:${
-            cdk.Stack.of(this).account
-          }:knowledge-base/${this.knowledgeBase.knowledgeBaseId}`,
-        ],
-      })
-    );
+  
     this.saveEmbeddingsFunction.addToRolePolicy(
       new iam.PolicyStatement({
         actions: ["s3:GetObject", "s3:ListBucket"],
@@ -353,31 +297,123 @@ export class AppSyncConstruct extends Construct {
       })
     );
 
-  
-  
+    // Create EventBridge EventBus for Video Agent
+    const videoAgentEventBus = new cdk.aws_events.EventBus(this, "VideoAgentEventBus", {
+      eventBusName: "VideoAgentEventBus",
+    });
 
+    // Import FFmpeg Layer
+    const ffmpegLayer = lambda.LayerVersion.fromLayerVersionArn(
+      this,
+      "FfmpegLayer",
+      "arn:aws:lambda:us-east-2:132260253285:layer:ffmpeg:1"
+    );
+
+   
+
+  
+    // Create search function
+    const searchCutWorkflowFunction = new PythonFunction(this, "SearchCutWorkflowFunction", {
+      entry: "./src/py/",
+      handler: "lambda_handler",
+      index: "search_cut_workflow.py",
+      runtime: cdk.aws_lambda.Runtime.PYTHON_3_13,
+      memorySize: 1024, 
+     
+      durableConfig: {
+          executionTimeout: cdk.Duration.days(365),
+         retentionPeriod: cdk.Duration.days(7),
+        },
+      
+      logGroup: searchFunctionLogs,
+      tracing: cdk.aws_lambda.Tracing.ACTIVE,
+      layers: [ffmpegLayer],
+      environment: {
+        VECTOR_BUCKET_NAME: vectorBucket.vectorBucketName,
+        VECTOR_INDEX_NAME: vectorIndex.indexName,
+        EVENT_BUS_NAME: videoAgentEventBus.eventBusName,
+        SOURCE_BUCKET_NAME: this.mediaBucket.bucketName,
+      }
+    });
+        // Create version and alias
+    const version = searchCutWorkflowFunction.currentVersion;
+    const alias = new lambda.Alias(this, 'ProdAlias', {
+      aliasName: 'prod',
+      version: version,
+    });
+          const invokeSearchCutWorkflowFunction = new PythonFunction(this,
+      "invokeSearchCutWorkflowFunction",
+      {
+        entry: "./src/py/",
+        handler: "handler",
+        index: "invoke_search_cut_workflow.py",
+        runtime: cdk.aws_lambda.Runtime.PYTHON_3_13,
+        memorySize: 1024,
+        timeout: cdk.Duration.seconds(30),
+        logGroup: new logs.LogGroup(
+      this,
+      "invokeSearchCutWorkflowFunctionLogs",
+      {
+        retention: logs.RetentionDays.ONE_WEEK,
+      }
+    ),
+        environment: {
+          SEARCH_CUT_WORKFLOW_FUNCTION_ARN: alias.functionArn,
+        },
+      }
+    );
+
+      searchCutWorkflowFunction.grantInvoke(invokeSearchCutWorkflowFunction);
+
+       // Add checkpoint permissions
+    searchCutWorkflowFunction.addToRolePolicy(new iam.PolicyStatement({
+      actions: [
+        'lambda:CheckpointDurableExecutions',
+        'lambda:GetDurableExecutionState',
+      ],
+      resources: ["*"],
+    }));
+
+
+    // Permissions for searchFunction
+    this.mediaBucket.grantReadWrite(searchCutWorkflowFunction);
+    videoAgentEventBus.grantPutEventsTo(searchCutWorkflowFunction);
+
+    // Grant Read Access to Vector Bucket (Manual Policy as s3Vectors.Bucket might not expose grantRead)
+    searchCutWorkflowFunction.addToRolePolicy(
+      new iam.PolicyStatement({
+        actions: ["s3:GetObject", "s3:ListBucket"],
+        resources: [
+          `arn:aws:s3:::${vectorBucket.vectorBucketName}`,
+          `arn:aws:s3:::${vectorBucket.vectorBucketName}/*`
+        ],
+        effect: iam.Effect.ALLOW,
+      })
+    );
+
+    searchCutWorkflowFunction.addToRolePolicy(
+      new iam.PolicyStatement({
+        actions: ["bedrock:InvokeModel"],
+        resources: ["arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-embed-multimodal-v1:0"],
+        effect: iam.Effect.ALLOW,
+      })
+    );
+
+    // Grant s3vectors permissions
+    searchCutWorkflowFunction.addToRolePolicy(
+      new iam.PolicyStatement({
+        actions: ["s3vectors:QueryVectors"], 
+        resources: ["*"], // Granulize if possible
+      })
+    );
 
      this.api.addEnvironmentVariable(
       "FOUNDATION_MODEL_ARN",
       BEDROCK_MODELS.CLAUDE_3_5_SONNET
     );
-         this.api.addEnvironmentVariable(
-      "KNOWLEDGEBASE_ID",
-      this.knowledgeBase.knowledgeBaseId
-    );
+        
 
 
-
-    // Create a resolver for retrieving and generating responses
-    this.api.createResolver("RetrieveAndGenerateResponse", {
-      typeName: "Mutation",
-      fieldName: "retrieveAndGenerateResponse",
-      dataSource: bedrockRetrieveAndGenerateDS,
-      runtime: appsync.FunctionRuntime.JS_1_0_0,
-      code: appsync.Code.fromAsset(
-        path.join(__dirname, "../resolvers/retrieveAndGenerateResponse.js")
-      ),
-    });
 
     //export graphq api endpoint
     new cdk.CfnOutput(this, "GraphQLAPIEndpoint", {
