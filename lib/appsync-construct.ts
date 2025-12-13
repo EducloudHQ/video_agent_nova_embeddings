@@ -406,6 +406,20 @@ export class AppSyncConstruct extends Construct {
         resources: ["*"], // Granulize if possible
       })
     );
+            this.api
+      .addLambdaDataSource(
+        "invokeSearchCutWorkflowFunction",
+        invokeSearchCutWorkflowFunction
+      )
+      .createResolver("invokeSearchCutWorkflowFunctionResolver", {
+        typeName: "Mutation",
+        fieldName: "search",
+        code: appsync.Code.fromAsset(
+          path.join(__dirname, "../resolvers/invoke/invoke.js")
+        ),
+        runtime: appsync.FunctionRuntime.JS_1_0_0,
+      });
+
 
      this.api.addEnvironmentVariable(
       "FOUNDATION_MODEL_ARN",
