@@ -394,7 +394,7 @@ export class AppSyncConstruct extends Construct {
     searchCutWorkflowFunction.addToRolePolicy(
       new iam.PolicyStatement({
         actions: ["bedrock:InvokeModel"],
-        resources: ["arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-embed-multimodal-v1:0"],
+        resources: ["arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-2-multimodal-embeddings-v1:0"],
         effect: iam.Effect.ALLOW,
       })
     );

@@ -1,8 +1,7 @@
 import boto3
 import json
 import os
-import json
-import boto3
+from botocore.config import Config
 import uuid
 import subprocess
 from aws_durable_execution_sdk_python import (
@@ -23,7 +22,8 @@ from aws_durable_execution_sdk_python.retries import (
 VECTOR_BUCKET_NAME = os.environ.get('VECTOR_BUCKET_NAME')
 VECTOR_INDEX_NAME = os.environ.get('VECTOR_INDEX_NAME', '')
 s3_vectors = boto3.client('s3vectors')
-bedrock_runtime = boto3.client('bedrock-runtime')
+config = Config(read_timeout=3600)
+bedrock_runtime = boto3.client('bedrock-runtime', region_name='us-east-1', config=config)
 s3_client = boto3.client('s3')
 
 events_client = boto3.client("events")
@@ -81,7 +81,7 @@ def search_video_step(step_context: StepContext, query: str) -> dict:
     }
     
     response = bedrock_runtime.invoke_model(
-        modelId='amazon.nova-embed-multimodal-v1:0', 
+        modelId='amazon.nova-2-multimodal-embeddings-v1:0', 
         body=json.dumps(request_body),
         accept="application/json",
         contentType="application/json",
