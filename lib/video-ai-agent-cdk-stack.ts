@@ -4,9 +4,11 @@ import { AppSyncConstruct } from './appsync-construct';
 
 
 export class VideoAiAgentCdkStack extends cdk.Stack {
+  public readonly appSyncConstruct: AppSyncConstruct;
+
   constructor(scope: Construct, id: string, props?: cdk.StackProps) {
     super(scope, id, props);
 
-    new AppSyncConstruct(this, "AppSyncConstruct",{});
+    this.appSyncConstruct = new AppSyncConstruct(this, "AppSyncConstruct",{});
   }
 }

@@ -34,6 +34,9 @@ export class AppSyncConstruct extends Construct {
   public readonly saveEmbeddingsFunction: NodejsFunction;
   public readonly mediaBucket: s3.Bucket;
   public readonly generateEmbeddingsStateMachine: sfn.StateMachine;
+  public readonly vectorBucketName: string;
+  public readonly vectorIndexName: string;
+  public readonly eventBusName: string;
 
   constructor(scope: Construct, id: string, props: AppSyncConstructProps={}) {
     super(scope, id);
@@ -93,6 +96,9 @@ export class AppSyncConstruct extends Construct {
     });
     // REQUIRED - add dependency for vector index
     vectorIndex.node.addDependency(vectorBucket);
+
+    this.vectorBucketName = vectorBucket.vectorBucketName;
+    this.vectorIndexName = vectorIndex.indexName;
 
   
   
@@ -158,13 +164,7 @@ export class AppSyncConstruct extends Construct {
         retention: logs.RetentionDays.ONE_WEEK,
       }
     );
-         const searchFunctionLogs = new logs.LogGroup(
-      this,
-      "searchFunctionLogs",
-      {
-        retention: logs.RetentionDays.ONE_WEEK,
-      }
-    );
+
 
       this.saveEmbeddingsFunction = new PythonFunction(
       this,
@@ -297,51 +297,27 @@ export class AppSyncConstruct extends Construct {
       })
     );
 
+    this.saveEmbeddingsFunction.addToRolePolicy(
+      new iam.PolicyStatement({
+        actions: ["s3vectors:PutVectors"],
+        resources: ["*"],
+      })
+    );
+    encryptionKey.grantEncryptDecrypt(this.saveEmbeddingsFunction);
+
     // Create EventBridge EventBus for Video Agent
     const videoAgentEventBus = new cdk.aws_events.EventBus(this, "VideoAgentEventBus", {
       eventBusName: "VideoAgentEventBus",
     });
+    this.eventBusName = videoAgentEventBus.eventBusName;
 
     // Import FFmpeg Layer
-    const ffmpegLayer = lambda.LayerVersion.fromLayerVersionArn(
-      this,
-      "FfmpegLayer",
-      "arn:aws:lambda:us-east-2:132260253285:layer:ffmpeg:1"
-    );
+
 
    
 
   
-    // Create search function
-    const searchCutWorkflowFunction = new PythonFunction(this, "SearchCutWorkflowFunction", {
-      entry: "./src/py/",
-      handler: "lambda_handler",
-      index: "search_cut_workflow.py",
-      runtime: cdk.aws_lambda.Runtime.PYTHON_3_13,
-      memorySize: 1024, 
-     
-      durableConfig: {
-          executionTimeout: cdk.Duration.days(365),
-         retentionPeriod: cdk.Duration.days(7),
-        },
-      
-      logGroup: searchFunctionLogs,
-      tracing: cdk.aws_lambda.Tracing.ACTIVE,
-      layers: [ffmpegLayer],
-      environment: {
-        VECTOR_BUCKET_NAME: vectorBucket.vectorBucketName,
-        VECTOR_INDEX_NAME: vectorIndex.indexName,
-        EVENT_BUS_NAME: videoAgentEventBus.eventBusName,
-        SOURCE_BUCKET_NAME: this.mediaBucket.bucketName,
-      }
-    });
-        // Create version and alias
-    const version = searchCutWorkflowFunction.currentVersion;
-    const alias = new lambda.Alias(this, 'ProdAlias', {
-      aliasName: 'prod',
-      version: version,
-    });
-          const invokeSearchCutWorkflowFunction = new PythonFunction(this,
+    const invokeSearchCutWorkflowFunction = new PythonFunction(this,
       "invokeSearchCutWorkflowFunction",
       {
         entry: "./src/py/",
@@ -351,59 +327,25 @@ export class AppSyncConstruct extends Construct {
         memorySize: 1024,
         timeout: cdk.Duration.seconds(30),
         logGroup: new logs.LogGroup(
-      this,
-      "invokeSearchCutWorkflowFunctionLogs",
-      {
-        retention: logs.RetentionDays.ONE_WEEK,
-      }
-    ),
+          this,
+          "invokeSearchCutWorkflowFunctionLogs",
+          {
+            retention: logs.RetentionDays.ONE_WEEK,
+          }
+        ),
         environment: {
-          SEARCH_CUT_WORKFLOW_FUNCTION_ARN: alias.functionArn,
+          SEARCH_CUT_WORKFLOW_FUNCTION_ARN: `arn:aws:lambda:us-east-2:${cdk.Stack.of(this).account}:function:SearchCutWorkflowFunction`,
+          TARGET_REGION: "us-east-2"
         },
       }
     );
 
-      searchCutWorkflowFunction.grantInvoke(invokeSearchCutWorkflowFunction);
-
-       // Add checkpoint permissions
-    searchCutWorkflowFunction.addToRolePolicy(new iam.PolicyStatement({
-      actions: [
-        'lambda:CheckpointDurableExecutions',
-        'lambda:GetDurableExecutionState',
-      ],
-      resources: ["*"],
-    }));
-
-
-    // Permissions for searchFunction
-    this.mediaBucket.grantReadWrite(searchCutWorkflowFunction);
-    videoAgentEventBus.grantPutEventsTo(searchCutWorkflowFunction);
-
-    // Grant Read Access to Vector Bucket (Manual Policy as s3Vectors.Bucket might not expose grantRead)
-    searchCutWorkflowFunction.addToRolePolicy(
+    // Grant permission to invoke the cross-region Lambda
+    invokeSearchCutWorkflowFunction.addToRolePolicy(
       new iam.PolicyStatement({
-        actions: ["s3:GetObject", "s3:ListBucket"],
-        resources: [
-          `arn:aws:s3:::${vectorBucket.vectorBucketName}`,
-          `arn:aws:s3:::${vectorBucket.vectorBucketName}/*`
-        ],
+        actions: ["lambda:InvokeFunction"],
+        resources: [`arn:aws:lambda:us-east-2:${cdk.Stack.of(this).account}:function:SearchCutWorkflowFunction`],
         effect: iam.Effect.ALLOW,
-      })
-    );
-
-    searchCutWorkflowFunction.addToRolePolicy(
-      new iam.PolicyStatement({
-        actions: ["bedrock:InvokeModel"],
-        resources: ["arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-2-multimodal-embeddings-v1:0"],
-        effect: iam.Effect.ALLOW,
-      })
-    );
-
-    // Grant s3vectors permissions
-    searchCutWorkflowFunction.addToRolePolicy(
-      new iam.PolicyStatement({
-        actions: ["s3vectors:QueryVectors"], 
-        resources: ["*"], // Granulize if possible
       })
     );
             this.api

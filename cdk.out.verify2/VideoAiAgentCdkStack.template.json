@@ -1,0 +1,2170 @@
+{
+ "Resources": {
+  "AppSyncConstructVectorBucketKeyA25EBCD0": {
+   "Type": "AWS::KMS::Key",
+   "Properties": {
+    "Description": "KMS key for S3 vector bucket encryption",
+    "EnableKeyRotation": true,
+    "KeyPolicy": {
+     "Statement": [
+      {
+       "Action": "kms:*",
+       "Effect": "Allow",
+       "Principal": {
+        "AWS": "arn:aws:iam::132260253285:root"
+       },
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "kms:Decrypt",
+        "kms:DescribeKey",
+        "kms:GenerateDataKey"
+       ],
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "indexing.s3vectors.amazonaws.com"
+       },
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VectorBucketKey/Resource"
+   }
+  },
+  "AppSyncConstructVideoMediaBucket48B42D33": {
+   "Type": "AWS::S3::Bucket",
+   "Properties": {
+    "BucketEncryption": {
+     "ServerSideEncryptionConfiguration": [
+      {
+       "ServerSideEncryptionByDefault": {
+        "SSEAlgorithm": "AES256"
+       }
+      }
+     ]
+    },
+    "BucketName": "132260253285-us-east-1-video-media-bucket",
+    "LifecycleConfiguration": {
+     "Rules": [
+      {
+       "Id": "DeleteOldVersions",
+       "NoncurrentVersionExpiration": {
+        "NoncurrentDays": 30
+       },
+       "Status": "Enabled"
+      }
+     ]
+    },
+    "PublicAccessBlockConfiguration": {
+     "BlockPublicAcls": true,
+     "BlockPublicPolicy": true,
+     "IgnorePublicAcls": true,
+     "RestrictPublicBuckets": true
+    },
+    "VersioningConfiguration": {
+     "Status": "Enabled"
+    }
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoMediaBucket/Resource"
+   }
+  },
+  "AppSyncConstructVideoMediaBucketNotifications0ECE5F1D": {
+   "Type": "Custom::S3BucketNotifications",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691",
+      "Arn"
+     ]
+    },
+    "BucketName": {
+     "Ref": "AppSyncConstructVideoMediaBucket48B42D33"
+    },
+    "NotificationConfiguration": {
+     "LambdaFunctionConfigurations": [
+      {
+       "Events": [
+        "s3:ObjectCreated:*"
+       ],
+       "Filter": {
+        "Key": {
+         "FilterRules": [
+          {
+           "Name": "prefix",
+           "Value": "videos/"
+          }
+         ]
+        }
+       },
+       "LambdaFunctionArn": {
+        "Fn::GetAtt": [
+         "AppSyncConstructinvokeWorkflowFunctionDEBAFE14",
+         "Arn"
+        ]
+       }
+      }
+     ]
+    },
+    "Managed": true,
+    "SkipDestinationValidation": false
+   },
+   "DependsOn": [
+    "AppSyncConstructVideoMediaBucketAllowBucketNotificationsToVideoAiAgentCdkStackAppSyncConstructinvokeWorkflowFunction834313E21EA5A256"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoMediaBucket/Notifications/Resource"
+   }
+  },
+  "AppSyncConstructVideoMediaBucketAllowBucketNotificationsToVideoAiAgentCdkStackAppSyncConstructinvokeWorkflowFunction834313E21EA5A256": {
+   "Type": "AWS::Lambda::Permission",
+   "Properties": {
+    "Action": "lambda:InvokeFunction",
+    "FunctionName": {
+     "Fn::GetAtt": [
+      "AppSyncConstructinvokeWorkflowFunctionDEBAFE14",
+      "Arn"
+     ]
+    },
+    "Principal": "s3.amazonaws.com",
+    "SourceAccount": "132260253285",
+    "SourceArn": {
+     "Fn::GetAtt": [
+      "AppSyncConstructVideoMediaBucket48B42D33",
+      "Arn"
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoMediaBucket/AllowBucketNotificationsToVideoAiAgentCdkStackAppSyncConstructinvokeWorkflowFunction834313E2"
+   }
+  },
+  "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRole9CF54A77": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorBucket/S3VectorsBucketHandler/ServiceRole/Resource"
+   }
+  },
+  "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRoleDefaultPolicy7241EC10": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "s3vectors:CreateVectorBucket",
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "s3vectors:DeleteIndex",
+        "s3vectors:DeleteVectorBucket",
+        "s3vectors:ListIndexes"
+       ],
+       "Effect": "Allow",
+       "Resource": "arn:aws:s3vectors:us-east-1:132260253285:bucket/video-agent-vector-bucket"
+      },
+      {
+       "Action": [
+        "kms:Decrypt",
+        "kms:DescribeKey",
+        "kms:GenerateDataKey"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "AppSyncConstructVectorBucketKeyA25EBCD0",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRoleDefaultPolicy7241EC10",
+    "Roles": [
+     {
+      "Ref": "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRole9CF54A77"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorBucket/S3VectorsBucketHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerB6F9FA4A": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-132260253285-us-east-1",
+     "S3Key": "8781d893470b333e7b602c24cc571099b19860f20e73e30a03b5c1a028238e37.zip"
+    },
+    "Handler": "s3-vectors-create-bucket.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRole9CF54A77",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 300
+   },
+   "DependsOn": [
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRoleDefaultPolicy7241EC10",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRole9CF54A77"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorBucket/S3VectorsBucketHandler/Resource",
+    "aws:asset:path": "asset.8781d893470b333e7b602c24cc571099b19860f20e73e30a03b5c1a028238e37",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerLogGroup258EC59A": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerB6F9FA4A"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorBucket/S3VectorsBucketHandler/LogGroup/Resource"
+   }
+  },
+  "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRole8F5C810A": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorBucket/S3VectorsProvider/framework-onEvent/ServiceRole/Resource"
+   }
+  },
+  "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRoleDefaultPolicyB55FE35A": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerB6F9FA4A",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerB6F9FA4A",
+             "Arn"
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "lambda:GetFunction",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerB6F9FA4A",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRoleDefaultPolicyB55FE35A",
+    "Roles": [
+     {
+      "Ref": "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRole8F5C810A"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorBucket/S3VectorsProvider/framework-onEvent/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventB8AECA51": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-132260253285-us-east-1",
+     "S3Key": "bdc104ed9cab1b5b6421713c8155f0b753380595356f710400609664d3635eca.zip"
+    },
+    "Description": "AWS CDK resource provider framework - onEvent (VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorBucket/S3VectorsProvider)",
+    "Environment": {
+     "Variables": {
+      "USER_ON_EVENT_FUNCTION_ARN": {
+       "Fn::GetAtt": [
+        "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerB6F9FA4A",
+        "Arn"
+       ]
+      }
+     }
+    },
+    "Handler": "framework.onEvent",
+    "LoggingConfig": {
+     "ApplicationLogLevel": "FATAL",
+     "LogFormat": "JSON"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRole8F5C810A",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 900
+   },
+   "DependsOn": [
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRoleDefaultPolicyB55FE35A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRole8F5C810A"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorBucket/S3VectorsProvider/framework-onEvent/Resource",
+    "aws:asset:path": "asset.bdc104ed9cab1b5b6421713c8155f0b753380595356f710400609664d3635eca",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventLogGroup2379E6C8": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventB8AECA51"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorBucket/S3VectorsProvider/framework-onEvent/LogGroup/Resource"
+   }
+  },
+  "AppSyncConstructVideoAgentVectorBucketVectorBucketCustomResourceDACBE238": {
+   "Type": "AWS::CloudFormation::CustomResource",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventB8AECA51",
+      "Arn"
+     ]
+    },
+    "vectorBucketName": "video-agent-vector-bucket",
+    "encryptionConfiguration": {
+     "sseType": "aws:kms",
+     "kmsKeyArn": {
+      "Fn::GetAtt": [
+       "AppSyncConstructVectorBucketKeyA25EBCD0",
+       "Arn"
+      ]
+     }
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorBucket/VectorBucketCustomResource/Default"
+   }
+  },
+  "AppSyncConstructVideoAgentVectorIndexS3VectorsHandlerServiceRole01EB414C": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "DependsOn": [
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerLogGroup258EC59A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerB6F9FA4A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRoleDefaultPolicy7241EC10",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRole9CF54A77",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventLogGroup2379E6C8",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventB8AECA51",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRoleDefaultPolicyB55FE35A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRole8F5C810A",
+    "AppSyncConstructVideoAgentVectorBucketVectorBucketCustomResourceDACBE238"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorIndex/S3VectorsHandler/ServiceRole/Resource"
+   }
+  },
+  "AppSyncConstructVideoAgentVectorIndexS3VectorsHandlerServiceRoleDefaultPolicyAF81F80A": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "s3vectors:CreateIndex",
+        "s3vectors:DeleteIndex"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::Join": [
+         "",
+         [
+          "arn:aws:s3vectors:us-east-1:132260253285:bucket/",
+          {
+           "Fn::GetAtt": [
+            "AppSyncConstructVideoAgentVectorBucketVectorBucketCustomResourceDACBE238",
+            "VectorBucketName"
+           ]
+          },
+          "/index/video-agent-vector-index"
+         ]
+        ]
+       }
+      },
+      {
+       "Action": [
+        "kms:Decrypt",
+        "kms:DescribeKey",
+        "kms:GenerateDataKey"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AppSyncConstructVideoAgentVectorIndexS3VectorsHandlerServiceRoleDefaultPolicyAF81F80A",
+    "Roles": [
+     {
+      "Ref": "AppSyncConstructVideoAgentVectorIndexS3VectorsHandlerServiceRole01EB414C"
+     }
+    ]
+   },
+   "DependsOn": [
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerLogGroup258EC59A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerB6F9FA4A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRoleDefaultPolicy7241EC10",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRole9CF54A77",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventLogGroup2379E6C8",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventB8AECA51",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRoleDefaultPolicyB55FE35A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRole8F5C810A",
+    "AppSyncConstructVideoAgentVectorBucketVectorBucketCustomResourceDACBE238"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorIndex/S3VectorsHandler/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "AppSyncConstructVideoAgentVectorIndexS3VectorsHandlerA03C4967": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-132260253285-us-east-1",
+     "S3Key": "8781d893470b333e7b602c24cc571099b19860f20e73e30a03b5c1a028238e37.zip"
+    },
+    "Handler": "s3-vectors-create-index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "AppSyncConstructVideoAgentVectorIndexS3VectorsHandlerServiceRole01EB414C",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 300
+   },
+   "DependsOn": [
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerLogGroup258EC59A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerB6F9FA4A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRoleDefaultPolicy7241EC10",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRole9CF54A77",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventLogGroup2379E6C8",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventB8AECA51",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRoleDefaultPolicyB55FE35A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRole8F5C810A",
+    "AppSyncConstructVideoAgentVectorBucketVectorBucketCustomResourceDACBE238",
+    "AppSyncConstructVideoAgentVectorIndexS3VectorsHandlerServiceRoleDefaultPolicyAF81F80A",
+    "AppSyncConstructVideoAgentVectorIndexS3VectorsHandlerServiceRole01EB414C"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorIndex/S3VectorsHandler/Resource",
+    "aws:asset:path": "asset.8781d893470b333e7b602c24cc571099b19860f20e73e30a03b5c1a028238e37",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "AppSyncConstructVideoAgentVectorIndexS3VectorsHandlerLogGroupCCBD03B7": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "AppSyncConstructVideoAgentVectorIndexS3VectorsHandlerA03C4967"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "DependsOn": [
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerLogGroup258EC59A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerB6F9FA4A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRoleDefaultPolicy7241EC10",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRole9CF54A77",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventLogGroup2379E6C8",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventB8AECA51",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRoleDefaultPolicyB55FE35A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRole8F5C810A",
+    "AppSyncConstructVideoAgentVectorBucketVectorBucketCustomResourceDACBE238"
+   ],
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorIndex/S3VectorsHandler/LogGroup/Resource"
+   }
+  },
+  "AppSyncConstructVideoAgentVectorIndexS3VectorsProviderframeworkonEventServiceRole7A24CDED": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "DependsOn": [
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerLogGroup258EC59A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerB6F9FA4A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRoleDefaultPolicy7241EC10",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRole9CF54A77",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventLogGroup2379E6C8",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventB8AECA51",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRoleDefaultPolicyB55FE35A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRole8F5C810A",
+    "AppSyncConstructVideoAgentVectorBucketVectorBucketCustomResourceDACBE238"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorIndex/S3VectorsProvider/framework-onEvent/ServiceRole/Resource"
+   }
+  },
+  "AppSyncConstructVideoAgentVectorIndexS3VectorsProviderframeworkonEventServiceRoleDefaultPolicy2EA2189E": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "AppSyncConstructVideoAgentVectorIndexS3VectorsHandlerA03C4967",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "AppSyncConstructVideoAgentVectorIndexS3VectorsHandlerA03C4967",
+             "Arn"
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "lambda:GetFunction",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "AppSyncConstructVideoAgentVectorIndexS3VectorsHandlerA03C4967",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AppSyncConstructVideoAgentVectorIndexS3VectorsProviderframeworkonEventServiceRoleDefaultPolicy2EA2189E",
+    "Roles": [
+     {
+      "Ref": "AppSyncConstructVideoAgentVectorIndexS3VectorsProviderframeworkonEventServiceRole7A24CDED"
+     }
+    ]
+   },
+   "DependsOn": [
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerLogGroup258EC59A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerB6F9FA4A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRoleDefaultPolicy7241EC10",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRole9CF54A77",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventLogGroup2379E6C8",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventB8AECA51",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRoleDefaultPolicyB55FE35A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRole8F5C810A",
+    "AppSyncConstructVideoAgentVectorBucketVectorBucketCustomResourceDACBE238"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorIndex/S3VectorsProvider/framework-onEvent/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "AppSyncConstructVideoAgentVectorIndexS3VectorsProviderframeworkonEvent0383A473": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-132260253285-us-east-1",
+     "S3Key": "bdc104ed9cab1b5b6421713c8155f0b753380595356f710400609664d3635eca.zip"
+    },
+    "Description": "AWS CDK resource provider framework - onEvent (VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorIndex/S3VectorsProvider)",
+    "Environment": {
+     "Variables": {
+      "USER_ON_EVENT_FUNCTION_ARN": {
+       "Fn::GetAtt": [
+        "AppSyncConstructVideoAgentVectorIndexS3VectorsHandlerA03C4967",
+        "Arn"
+       ]
+      }
+     }
+    },
+    "Handler": "framework.onEvent",
+    "LoggingConfig": {
+     "ApplicationLogLevel": "FATAL",
+     "LogFormat": "JSON"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "AppSyncConstructVideoAgentVectorIndexS3VectorsProviderframeworkonEventServiceRole7A24CDED",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "Timeout": 900
+   },
+   "DependsOn": [
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerLogGroup258EC59A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerB6F9FA4A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRoleDefaultPolicy7241EC10",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRole9CF54A77",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventLogGroup2379E6C8",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventB8AECA51",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRoleDefaultPolicyB55FE35A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRole8F5C810A",
+    "AppSyncConstructVideoAgentVectorBucketVectorBucketCustomResourceDACBE238",
+    "AppSyncConstructVideoAgentVectorIndexS3VectorsProviderframeworkonEventServiceRoleDefaultPolicy2EA2189E",
+    "AppSyncConstructVideoAgentVectorIndexS3VectorsProviderframeworkonEventServiceRole7A24CDED"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorIndex/S3VectorsProvider/framework-onEvent/Resource",
+    "aws:asset:path": "asset.bdc104ed9cab1b5b6421713c8155f0b753380595356f710400609664d3635eca",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "AppSyncConstructVideoAgentVectorIndexS3VectorsProviderframeworkonEventLogGroupC65CC074": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/lambda/",
+       {
+        "Ref": "AppSyncConstructVideoAgentVectorIndexS3VectorsProviderframeworkonEvent0383A473"
+       }
+      ]
+     ]
+    },
+    "RetentionInDays": 731
+   },
+   "DependsOn": [
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerLogGroup258EC59A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerB6F9FA4A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRoleDefaultPolicy7241EC10",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRole9CF54A77",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventLogGroup2379E6C8",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventB8AECA51",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRoleDefaultPolicyB55FE35A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRole8F5C810A",
+    "AppSyncConstructVideoAgentVectorBucketVectorBucketCustomResourceDACBE238"
+   ],
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorIndex/S3VectorsProvider/framework-onEvent/LogGroup/Resource"
+   }
+  },
+  "AppSyncConstructVideoAgentVectorIndexS3VectorIndexCustomResource59724E71": {
+   "Type": "AWS::CloudFormation::CustomResource",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "AppSyncConstructVideoAgentVectorIndexS3VectorsProviderframeworkonEvent0383A473",
+      "Arn"
+     ]
+    },
+    "physicalId": {
+     "Fn::Join": [
+      "",
+      [
+       {
+        "Fn::GetAtt": [
+         "AppSyncConstructVideoAgentVectorBucketVectorBucketCustomResourceDACBE238",
+         "VectorBucketName"
+        ]
+       },
+       "-video-agent-vector-index"
+      ]
+     ]
+    },
+    "vectorBucketName": {
+     "Fn::GetAtt": [
+      "AppSyncConstructVideoAgentVectorBucketVectorBucketCustomResourceDACBE238",
+      "VectorBucketName"
+     ]
+    },
+    "indexName": "video-agent-vector-index",
+    "dataType": "float32",
+    "dimension": 1024,
+    "distanceMetric": "cosine",
+    "metadataConfiguration": {
+     "nonFilterableMetadataKeys": [
+      "source",
+      "timestamp",
+      "category"
+     ]
+    }
+   },
+   "DependsOn": [
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerLogGroup258EC59A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerB6F9FA4A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRoleDefaultPolicy7241EC10",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsBucketHandlerServiceRole9CF54A77",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventLogGroup2379E6C8",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventB8AECA51",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRoleDefaultPolicyB55FE35A",
+    "AppSyncConstructVideoAgentVectorBucketS3VectorsProviderframeworkonEventServiceRole8F5C810A",
+    "AppSyncConstructVideoAgentVectorBucketVectorBucketCustomResourceDACBE238"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentVectorIndex/S3VectorIndexCustomResource/Default"
+   }
+  },
+  "AppSyncConstructvideoagentapiApiLogsRoleDF6BB798": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "appsync.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSAppSyncPushToCloudWatchLogs"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/video-agent-api/ApiLogsRole/Resource"
+   }
+  },
+  "AppSyncConstructvideoagentapi25C4D16D": {
+   "Type": "AWS::AppSync::GraphQLApi",
+   "Properties": {
+    "AuthenticationType": "API_KEY",
+    "EnvironmentVariables": {
+     "FOUNDATION_MODEL_ARN": "arn:aws:bedrock:us-east-1::foundation-model/anthropic.claude-3-5-sonnet-20240620-v1:0"
+    },
+    "LogConfig": {
+     "CloudWatchLogsRoleArn": {
+      "Fn::GetAtt": [
+       "AppSyncConstructvideoagentapiApiLogsRoleDF6BB798",
+       "Arn"
+      ]
+     },
+     "FieldLogLevel": "ALL"
+    },
+    "Name": "VideoAgentAPI",
+    "XrayEnabled": true
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/video-agent-api/Resource"
+   }
+  },
+  "AppSyncConstructvideoagentapiSchema0D2E5ACC": {
+   "Type": "AWS::AppSync::GraphQLSchema",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "AppSyncConstructvideoagentapi25C4D16D",
+      "ApiId"
+     ]
+    },
+    "Definition": "schema {\n  mutation: Mutation\n  query:Query\n\n}\n\ntype Query {\n  testQuery: String\n}\n\ntype Mutation {\n  search(text: String!): Boolean! @aws_api_key\n\n}\n\n"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/video-agent-api/Schema"
+   }
+  },
+  "AppSyncConstructvideoagentapidefaultApiKey8E6DD3A9": {
+   "Type": "AWS::AppSync::ApiKey",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "AppSyncConstructvideoagentapi25C4D16D",
+      "ApiId"
+     ]
+    },
+    "Description": "Default API key for Ai Writer API",
+    "Expires": 1766202117
+   },
+   "DependsOn": [
+    "AppSyncConstructvideoagentapiSchema0D2E5ACC"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/video-agent-api/defaultApiKey"
+   }
+  },
+  "AppSyncConstructvideoagentapiLogRetention5C72DA60": {
+   "Type": "Custom::LogRetention",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A",
+      "Arn"
+     ]
+    },
+    "LogGroupName": {
+     "Fn::Join": [
+      "",
+      [
+       "/aws/appsync/apis/",
+       {
+        "Fn::GetAtt": [
+         "AppSyncConstructvideoagentapi25C4D16D",
+         "ApiId"
+        ]
+       }
+      ]
+     ]
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/video-agent-api/LogRetention/Resource"
+   }
+  },
+  "AppSyncConstructvideoagentapiNone7D446032": {
+   "Type": "AWS::AppSync::DataSource",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "AppSyncConstructvideoagentapi25C4D16D",
+      "ApiId"
+     ]
+    },
+    "Name": "None",
+    "Type": "NONE"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/video-agent-api/None/Resource"
+   }
+  },
+  "AppSyncConstructvideoagentapiBedrockRetrieveAndGenerateDSServiceRoleA2C17AA4": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "appsync.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/video-agent-api/BedrockRetrieveAndGenerateDS/ServiceRole/Resource"
+   }
+  },
+  "AppSyncConstructvideoagentapiBedrockRetrieveAndGenerateDS9823C3E5": {
+   "Type": "AWS::AppSync::DataSource",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "AppSyncConstructvideoagentapi25C4D16D",
+      "ApiId"
+     ]
+    },
+    "HttpConfig": {
+     "AuthorizationConfig": {
+      "AuthorizationType": "AWS_IAM",
+      "AwsIamConfig": {
+       "SigningRegion": "us-east-1",
+       "SigningServiceName": "bedrock"
+      }
+     },
+     "Endpoint": "https://bedrock-agent-runtime.us-east-1.amazonaws.com"
+    },
+    "Name": "BedrockRetrieveAndGenerateDS",
+    "ServiceRoleArn": {
+     "Fn::GetAtt": [
+      "AppSyncConstructvideoagentapiBedrockRetrieveAndGenerateDSServiceRoleA2C17AA4",
+      "Arn"
+     ]
+    },
+    "Type": "HTTP"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/video-agent-api/BedrockRetrieveAndGenerateDS/Resource"
+   }
+  },
+  "AppSyncConstructvideoagentapiinvokeSearchCutWorkflowFunctionServiceRoleCA06BFFE": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "appsync.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    }
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/video-agent-api/invokeSearchCutWorkflowFunction/ServiceRole/Resource"
+   }
+  },
+  "AppSyncConstructvideoagentapiinvokeSearchCutWorkflowFunctionServiceRoleDefaultPolicy0DF94302": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "AppSyncConstructinvokeSearchCutWorkflowFunctionB89EE297",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "AppSyncConstructinvokeSearchCutWorkflowFunctionB89EE297",
+             "Arn"
+            ]
+           },
+           ":*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AppSyncConstructvideoagentapiinvokeSearchCutWorkflowFunctionServiceRoleDefaultPolicy0DF94302",
+    "Roles": [
+     {
+      "Ref": "AppSyncConstructvideoagentapiinvokeSearchCutWorkflowFunctionServiceRoleCA06BFFE"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/video-agent-api/invokeSearchCutWorkflowFunction/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "AppSyncConstructvideoagentapiinvokeSearchCutWorkflowFunction745A2942": {
+   "Type": "AWS::AppSync::DataSource",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "AppSyncConstructvideoagentapi25C4D16D",
+      "ApiId"
+     ]
+    },
+    "LambdaConfig": {
+     "LambdaFunctionArn": {
+      "Fn::GetAtt": [
+       "AppSyncConstructinvokeSearchCutWorkflowFunctionB89EE297",
+       "Arn"
+      ]
+     }
+    },
+    "Name": "invokeSearchCutWorkflowFunction",
+    "ServiceRoleArn": {
+     "Fn::GetAtt": [
+      "AppSyncConstructvideoagentapiinvokeSearchCutWorkflowFunctionServiceRoleCA06BFFE",
+      "Arn"
+     ]
+    },
+    "Type": "AWS_LAMBDA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/video-agent-api/invokeSearchCutWorkflowFunction/Resource"
+   }
+  },
+  "AppSyncConstructvideoagentapiinvokeSearchCutWorkflowFunctionResolverECD592A6": {
+   "Type": "AWS::AppSync::Resolver",
+   "Properties": {
+    "ApiId": {
+     "Fn::GetAtt": [
+      "AppSyncConstructvideoagentapi25C4D16D",
+      "ApiId"
+     ]
+    },
+    "CodeS3Location": "s3://cdk-hnb659fds-assets-132260253285-us-east-1/cad068c0478cc7ef1a90da1d6e676e907208635f9a2c7737d021f99e58e7546d.js",
+    "DataSourceName": "invokeSearchCutWorkflowFunction",
+    "FieldName": "search",
+    "Kind": "UNIT",
+    "Runtime": {
+     "Name": "APPSYNC_JS",
+     "RuntimeVersion": "1.0.0"
+    },
+    "TypeName": "Mutation"
+   },
+   "DependsOn": [
+    "AppSyncConstructvideoagentapiinvokeSearchCutWorkflowFunction745A2942",
+    "AppSyncConstructvideoagentapiSchema0D2E5ACC"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/video-agent-api/invokeSearchCutWorkflowFunctionResolver/Resource"
+   }
+  },
+  "AppSyncConstructworkflowFunctionLogs7F249C8D": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 7
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/workflowFunctionLogs/Resource"
+   }
+  },
+  "AppSyncConstructembeddingsFunctionLogsBF1936BD": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 7
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/embeddingsFunctionLogs/Resource"
+   }
+  },
+  "AppSyncConstructinvokeWorkflowFunctionLogs1F8BC10C": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 7
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/invokeWorkflowFunctionLogs/Resource"
+   }
+  },
+  "AppSyncConstructsaveEmbeddingsFunctionServiceRoleBAFD7617": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/saveEmbeddingsFunction/ServiceRole/Resource"
+   }
+  },
+  "AppSyncConstructsaveEmbeddingsFunctionServiceRoleDefaultPolicy24DF5681": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "xray:PutTelemetryRecords",
+        "xray:PutTraceSegments"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "s3:GetObject",
+        "s3:ListBucket"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "AppSyncConstructVideoMediaBucket48B42D33",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "AppSyncConstructVideoMediaBucket48B42D33",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AppSyncConstructsaveEmbeddingsFunctionServiceRoleDefaultPolicy24DF5681",
+    "Roles": [
+     {
+      "Ref": "AppSyncConstructsaveEmbeddingsFunctionServiceRoleBAFD7617"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/saveEmbeddingsFunction/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "AppSyncConstructsaveEmbeddingsFunction3376A50F": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-132260253285-us-east-1",
+     "S3Key": "48e8bfbb18f3ae589518d9b38a04c658dbd942f28b65c190f482bfe74d264db3.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "VECTOR_BUCKET_NAME": {
+       "Fn::GetAtt": [
+        "AppSyncConstructVideoAgentVectorBucketVectorBucketCustomResourceDACBE238",
+        "VectorBucketName"
+       ]
+      },
+      "VECTOR_INDEX_NAME": "video-agent-vector-index",
+      "SOURCE_BUCKET_NAME": {
+       "Ref": "AppSyncConstructVideoMediaBucket48B42D33"
+      }
+     }
+    },
+    "Handler": "save_embeddings.lambda_handler",
+    "LoggingConfig": {
+     "LogGroup": {
+      "Ref": "AppSyncConstructembeddingsFunctionLogsBF1936BD"
+     }
+    },
+    "MemorySize": 512,
+    "Role": {
+     "Fn::GetAtt": [
+      "AppSyncConstructsaveEmbeddingsFunctionServiceRoleBAFD7617",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.13",
+    "Timeout": 600,
+    "TracingConfig": {
+     "Mode": "Active"
+    }
+   },
+   "DependsOn": [
+    "AppSyncConstructsaveEmbeddingsFunctionServiceRoleDefaultPolicy24DF5681",
+    "AppSyncConstructsaveEmbeddingsFunctionServiceRoleBAFD7617"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/saveEmbeddingsFunction/Resource",
+    "aws:asset:path": "asset.48e8bfbb18f3ae589518d9b38a04c658dbd942f28b65c190f482bfe74d264db3",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "AppSyncConstructStateMachineRoleB3F28CC6": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "states.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "Description": "IAM Role assumed by the Step Functions state machine",
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/StateMachineRole/Resource"
+   }
+  },
+  "AppSyncConstructStateMachineRoleDefaultPolicy4CF19D37": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "bedrock:InvokeModel",
+        "bedrock:getAsyncInvoke",
+        "bedrock:startAsyncInvoke",
+        "logs:CreateLogDelivery",
+        "logs:DeleteLogDelivery",
+        "logs:DescribeLogGroups",
+        "logs:DescribeResourcePolicies",
+        "logs:GetLogDelivery",
+        "logs:ListLogDeliveries",
+        "logs:PutResourcePolicy",
+        "logs:UpdateLogDelivery",
+        "xray:GetSamplingRules",
+        "xray:GetSamplingTargets",
+        "xray:PutTelemetryRecords",
+        "xray:PutTraceSegments"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "AppSyncConstructVideoMediaBucket48B42D33",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "AppSyncConstructVideoMediaBucket48B42D33",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "AppSyncConstructsaveEmbeddingsFunction3376A50F",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AppSyncConstructStateMachineRoleDefaultPolicy4CF19D37",
+    "Roles": [
+     {
+      "Ref": "AppSyncConstructStateMachineRoleB3F28CC6"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/StateMachineRole/DefaultPolicy/Resource"
+   }
+  },
+  "AppSyncConstructWithContextLogGroup7E38E79B": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "LogGroupName": "/aws/stepfunctions/GenerateEmbeddingsStateMachine",
+    "RetentionInDays": 7
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/WithContextLogGroup/Resource"
+   }
+  },
+  "AppSyncConstructGenerateEmbeddingsStateMachine49FB04E9": {
+   "Type": "AWS::StepFunctions::StateMachine",
+   "Properties": {
+    "DefinitionS3Location": {
+     "Bucket": "cdk-hnb659fds-assets-132260253285-us-east-1",
+     "Key": "6a6bc9bf59c4e8b17f122ecfa1422e8fe6382d1fc058a939824ca68bac93d9a4.json"
+    },
+    "DefinitionSubstitutions": {
+     "FUNCTION_ARN": {
+      "Fn::GetAtt": [
+       "AppSyncConstructsaveEmbeddingsFunction3376A50F",
+       "Arn"
+      ]
+     }
+    },
+    "LoggingConfiguration": {
+     "Destinations": [
+      {
+       "CloudWatchLogsLogGroup": {
+        "LogGroupArn": {
+         "Fn::GetAtt": [
+          "AppSyncConstructWithContextLogGroup7E38E79B",
+          "Arn"
+         ]
+        }
+       }
+      }
+     ],
+     "Level": "ALL"
+    },
+    "RoleArn": {
+     "Fn::GetAtt": [
+      "AppSyncConstructStateMachineRoleB3F28CC6",
+      "Arn"
+     ]
+    },
+    "StateMachineName": "GenerateEmbeddingsStateMachine",
+    "TracingConfiguration": {
+     "Enabled": true
+    }
+   },
+   "DependsOn": [
+    "AppSyncConstructStateMachineRoleDefaultPolicy4CF19D37",
+    "AppSyncConstructStateMachineRoleB3F28CC6"
+   ],
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/GenerateEmbeddingsStateMachine/Resource"
+   }
+  },
+  "AppSyncConstructinvokeWorkflowFunctionServiceRole753E98EA": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/invokeWorkflowFunction/ServiceRole/Resource"
+   }
+  },
+  "AppSyncConstructinvokeWorkflowFunctionServiceRoleDefaultPolicy10482C4B": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "xray:PutTelemetryRecords",
+        "xray:PutTraceSegments"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      },
+      {
+       "Action": [
+        "s3:Abort*",
+        "s3:DeleteObject*",
+        "s3:GetBucket*",
+        "s3:GetObject*",
+        "s3:List*",
+        "s3:PutObject",
+        "s3:PutObjectLegalHold",
+        "s3:PutObjectRetention",
+        "s3:PutObjectTagging",
+        "s3:PutObjectVersionTagging"
+       ],
+       "Effect": "Allow",
+       "Resource": [
+        {
+         "Fn::GetAtt": [
+          "AppSyncConstructVideoMediaBucket48B42D33",
+          "Arn"
+         ]
+        },
+        {
+         "Fn::Join": [
+          "",
+          [
+           {
+            "Fn::GetAtt": [
+             "AppSyncConstructVideoMediaBucket48B42D33",
+             "Arn"
+            ]
+           },
+           "/*"
+          ]
+         ]
+        }
+       ]
+      },
+      {
+       "Action": [
+        "states:DescribeExecution",
+        "states:StartExecution"
+       ],
+       "Effect": "Allow",
+       "Resource": {
+        "Ref": "AppSyncConstructGenerateEmbeddingsStateMachine49FB04E9"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AppSyncConstructinvokeWorkflowFunctionServiceRoleDefaultPolicy10482C4B",
+    "Roles": [
+     {
+      "Ref": "AppSyncConstructinvokeWorkflowFunctionServiceRole753E98EA"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/invokeWorkflowFunction/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "AppSyncConstructinvokeWorkflowFunctionDEBAFE14": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-132260253285-us-east-1",
+     "S3Key": "43334886176ca5a72244d85172eeb0cc8f322053acc55c7128b5a819aba693e2.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "STATE_MACHINE_ARN": {
+       "Ref": "AppSyncConstructGenerateEmbeddingsStateMachine49FB04E9"
+      },
+      "SOURCE_BUCKET_NAME": {
+       "Ref": "AppSyncConstructVideoMediaBucket48B42D33"
+      }
+     }
+    },
+    "Handler": "index.handler",
+    "LoggingConfig": {
+     "LogGroup": {
+      "Ref": "AppSyncConstructinvokeWorkflowFunctionLogs1F8BC10C"
+     }
+    },
+    "MemorySize": 256,
+    "Role": {
+     "Fn::GetAtt": [
+      "AppSyncConstructinvokeWorkflowFunctionServiceRole753E98EA",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x",
+    "TracingConfig": {
+     "Mode": "Active"
+    }
+   },
+   "DependsOn": [
+    "AppSyncConstructinvokeWorkflowFunctionServiceRoleDefaultPolicy10482C4B",
+    "AppSyncConstructinvokeWorkflowFunctionServiceRole753E98EA"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/invokeWorkflowFunction/Resource",
+    "aws:asset:path": "asset.43334886176ca5a72244d85172eeb0cc8f322053acc55c7128b5a819aba693e2",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "AppSyncConstructVideoAgentEventBus0C1232AD": {
+   "Type": "AWS::Events::EventBus",
+   "Properties": {
+    "Name": "VideoAgentEventBus"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/VideoAgentEventBus/Resource"
+   }
+  },
+  "AppSyncConstructinvokeSearchCutWorkflowFunctionLogsB8871918": {
+   "Type": "AWS::Logs::LogGroup",
+   "Properties": {
+    "RetentionInDays": 7
+   },
+   "UpdateReplacePolicy": "Retain",
+   "DeletionPolicy": "Retain",
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/invokeSearchCutWorkflowFunctionLogs/Resource"
+   }
+  },
+  "AppSyncConstructinvokeSearchCutWorkflowFunctionServiceRole3642B959": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/invokeSearchCutWorkflowFunction/ServiceRole/Resource"
+   }
+  },
+  "AppSyncConstructinvokeSearchCutWorkflowFunctionServiceRoleDefaultPolicyF53B7476": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "lambda:InvokeFunction",
+       "Effect": "Allow",
+       "Resource": "arn:aws:lambda:us-east-2:132260253285:function:SearchCutWorkflowFunction"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "AppSyncConstructinvokeSearchCutWorkflowFunctionServiceRoleDefaultPolicyF53B7476",
+    "Roles": [
+     {
+      "Ref": "AppSyncConstructinvokeSearchCutWorkflowFunctionServiceRole3642B959"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/invokeSearchCutWorkflowFunction/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "AppSyncConstructinvokeSearchCutWorkflowFunctionB89EE297": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-132260253285-us-east-1",
+     "S3Key": "48e8bfbb18f3ae589518d9b38a04c658dbd942f28b65c190f482bfe74d264db3.zip"
+    },
+    "Environment": {
+     "Variables": {
+      "SEARCH_CUT_WORKFLOW_FUNCTION_ARN": "arn:aws:lambda:us-east-2:132260253285:function:SearchCutWorkflowFunction",
+      "TARGET_REGION": "us-east-2"
+     }
+    },
+    "Handler": "invoke_search_cut_workflow.handler",
+    "LoggingConfig": {
+     "LogGroup": {
+      "Ref": "AppSyncConstructinvokeSearchCutWorkflowFunctionLogsB8871918"
+     }
+    },
+    "MemorySize": 1024,
+    "Role": {
+     "Fn::GetAtt": [
+      "AppSyncConstructinvokeSearchCutWorkflowFunctionServiceRole3642B959",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.13",
+    "Timeout": 30
+   },
+   "DependsOn": [
+    "AppSyncConstructinvokeSearchCutWorkflowFunctionServiceRoleDefaultPolicyF53B7476",
+    "AppSyncConstructinvokeSearchCutWorkflowFunctionServiceRole3642B959"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/AppSyncConstruct/invokeSearchCutWorkflowFunction/Resource",
+    "aws:asset:path": "asset.48e8bfbb18f3ae589518d9b38a04c658dbd942f28b65c190f482bfe74d264db3",
+    "aws:asset:is-bundled": true,
+    "aws:asset:property": "Code"
+   }
+  },
+  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/Resource"
+   }
+  },
+  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": [
+        "logs:DeleteRetentionPolicy",
+        "logs:PutRetentionPolicy"
+       ],
+       "Effect": "Allow",
+       "Resource": "*"
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+    "Roles": [
+     {
+      "Ref": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/ServiceRole/DefaultPolicy/Resource"
+   }
+  },
+  "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aFD4BFC8A": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Handler": "index.handler",
+    "Runtime": "nodejs22.x",
+    "Timeout": 900,
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-132260253285-us-east-1",
+     "S3Key": "2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d.zip"
+    },
+    "Role": {
+     "Fn::GetAtt": [
+      "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB",
+      "Arn"
+     ]
+    }
+   },
+   "DependsOn": [
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRoleDefaultPolicyADDA7DEB",
+    "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8aServiceRole9741ECFB"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Resource",
+    "aws:asset:path": "asset.2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d",
+    "aws:asset:is-bundled": false,
+    "aws:asset:property": "Code"
+   }
+  },
+  "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Join": [
+       "",
+       [
+        "arn:",
+        {
+         "Ref": "AWS::Partition"
+        },
+        ":iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+       ]
+      ]
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/Resource"
+   }
+  },
+  "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36": {
+   "Type": "AWS::IAM::Policy",
+   "Properties": {
+    "PolicyDocument": {
+     "Statement": [
+      {
+       "Action": "s3:PutBucketNotification",
+       "Effect": "Allow",
+       "Resource": {
+        "Fn::GetAtt": [
+         "AppSyncConstructVideoMediaBucket48B42D33",
+         "Arn"
+        ]
+       }
+      }
+     ],
+     "Version": "2012-10-17"
+    },
+    "PolicyName": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36",
+    "Roles": [
+     {
+      "Ref": "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC"
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Role/DefaultPolicy/Resource"
+   }
+  },
+  "BucketNotificationsHandler050a0587b7544547bf325f094a3db8347ECC3691": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Description": "AWS CloudFormation handler for \"Custom::S3BucketNotifications\" resources (@aws-cdk/aws-s3)",
+    "Code": {
+     "ZipFile": "import boto3  # type: ignore\nimport json\nimport logging\nimport urllib.request\n\ns3 = boto3.client(\"s3\")\n\nEVENTBRIDGE_CONFIGURATION = 'EventBridgeConfiguration'\nCONFIGURATION_TYPES = [\"TopicConfigurations\", \"QueueConfigurations\", \"LambdaFunctionConfigurations\"]\n\ndef handler(event: dict, context):\n  response_status = \"SUCCESS\"\n  error_message = \"\"\n  try:\n    props = event[\"ResourceProperties\"]\n    notification_configuration = props[\"NotificationConfiguration\"]\n    managed = props.get('Managed', 'true').lower() == 'true'\n    skipDestinationValidation = props.get('SkipDestinationValidation', 'false').lower() == 'true'\n    stack_id = event['StackId']\n    old = event.get(\"OldResourceProperties\", {}).get(\"NotificationConfiguration\", {})\n    if managed:\n      config = handle_managed(event[\"RequestType\"], notification_configuration)\n    else:\n      config = handle_unmanaged(props[\"BucketName\"], stack_id, event[\"RequestType\"], notification_configuration, old)\n    s3.put_bucket_notification_configuration(Bucket=props[\"BucketName\"], NotificationConfiguration=config, SkipDestinationValidation=skipDestinationValidation)\n  except Exception as e:\n    logging.exception(\"Failed to put bucket notification configuration\")\n    response_status = \"FAILED\"\n    error_message = f\"Error: {str(e)}. \"\n  finally:\n    submit_response(event, context, response_status, error_message)\n\ndef handle_managed(request_type, notification_configuration):\n  if request_type == 'Delete':\n    return {}\n  return notification_configuration\n\ndef handle_unmanaged(bucket, stack_id, request_type, notification_configuration, old):\n  def get_id(n):\n    n['Id'] = ''\n    sorted_notifications = sort_filter_rules(n)\n    strToHash=json.dumps(sorted_notifications, sort_keys=True).replace('\"Name\": \"prefix\"', '\"Name\": \"Prefix\"').replace('\"Name\": \"suffix\"', '\"Name\": \"Suffix\"')\n    return f\"{stack_id}-{hash(strToHash)}\"\n  def with_id(n):\n    n['Id'] = get_id(n)\n    return n\n\n  external_notifications = {}\n  existing_notifications = s3.get_bucket_notification_configuration(Bucket=bucket)\n  for t in CONFIGURATION_TYPES:\n    if request_type == 'Update':\n        old_incoming_ids = [get_id(n) for n in old.get(t, [])]\n        external_notifications[t] = [n for n in existing_notifications.get(t, []) if not get_id(n) in old_incoming_ids]      \n    elif request_type == 'Delete':\n        external_notifications[t] = [n for n in existing_notifications.get(t, []) if not n['Id'].startswith(f\"{stack_id}-\")]\n    elif request_type == 'Create':\n        external_notifications[t] = [n for n in existing_notifications.get(t, [])]\n  if EVENTBRIDGE_CONFIGURATION in existing_notifications:\n    external_notifications[EVENTBRIDGE_CONFIGURATION] = existing_notifications[EVENTBRIDGE_CONFIGURATION]\n\n  if request_type == 'Delete':\n    return external_notifications\n\n  notifications = {}\n  for t in CONFIGURATION_TYPES:\n    external = external_notifications.get(t, [])\n    incoming = [with_id(n) for n in notification_configuration.get(t, [])]\n    notifications[t] = external + incoming\n\n  if EVENTBRIDGE_CONFIGURATION in notification_configuration:\n    notifications[EVENTBRIDGE_CONFIGURATION] = notification_configuration[EVENTBRIDGE_CONFIGURATION]\n  elif EVENTBRIDGE_CONFIGURATION in external_notifications:\n    notifications[EVENTBRIDGE_CONFIGURATION] = external_notifications[EVENTBRIDGE_CONFIGURATION]\n\n  return notifications\n\ndef submit_response(event: dict, context, response_status: str, error_message: str):\n  response_body = json.dumps(\n    {\n      \"Status\": response_status,\n      \"Reason\": f\"{error_message}See the details in CloudWatch Log Stream: {context.log_stream_name}\",\n      \"PhysicalResourceId\": event.get(\"PhysicalResourceId\") or event[\"LogicalResourceId\"],\n      \"StackId\": event[\"StackId\"],\n      \"RequestId\": event[\"RequestId\"],\n      \"LogicalResourceId\": event[\"LogicalResourceId\"],\n      \"NoEcho\": False,\n    }\n  ).encode(\"utf-8\")\n  headers = {\"content-type\": \"\", \"content-length\": str(len(response_body))}\n  try:\n    req = urllib.request.Request(url=event[\"ResponseURL\"], headers=headers, data=response_body, method=\"PUT\")\n    with urllib.request.urlopen(req) as response:\n      print(response.read().decode(\"utf-8\"))\n    print(\"Status code: \" + response.reason)\n  except Exception as e:\n      print(\"send(..) failed executing request.urlopen(..): \" + str(e))\n\ndef sort_filter_rules(json_obj):\n  if not isinstance(json_obj, dict):\n      return json_obj\n  for key, value in json_obj.items():\n      if isinstance(value, dict):\n          json_obj[key] = sort_filter_rules(value)\n      elif isinstance(value, list):\n          json_obj[key] = [sort_filter_rules(item) for item in value]\n  if \"Filter\" in json_obj and \"Key\" in json_obj[\"Filter\"] and \"FilterRules\" in json_obj[\"Filter\"][\"Key\"]:\n      filter_rules = json_obj[\"Filter\"][\"Key\"][\"FilterRules\"]\n      sorted_filter_rules = sorted(filter_rules, key=lambda x: x[\"Name\"])\n      json_obj[\"Filter\"][\"Key\"][\"FilterRules\"] = sorted_filter_rules\n  return json_obj"
+    },
+    "Handler": "index.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC",
+      "Arn"
+     ]
+    },
+    "Runtime": "python3.13",
+    "Timeout": 300
+   },
+   "DependsOn": [
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleDefaultPolicy2CF63D36",
+    "BucketNotificationsHandler050a0587b7544547bf325f094a3db834RoleB6FB88EC"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/BucketNotificationsHandler050a0587b7544547bf325f094a3db834/Resource"
+   }
+  },
+  "CDKMetadata": {
+   "Type": "AWS::CDK::Metadata",
+   "Properties": {
+    "Analytics": "v2:deflate64:H4sIAAAAAAAA/+1YW28bKRT+LeGxwtPGeVjJTztOnGw3buq1o0orK7IwHNvEDMxycTtF899XMBeP6yjKqu02USvZAs45HM4NmI9+0j/rJ/70hHw0Pcq2PcGXiZ9ZQreYfDQLv81M4q+hmHvEwFDNc8uVRAP0CmEEkiwFXEMxVZZUdKsdlHf4fCWvoSixOUv80NEt2LlHy9i5IRnU8zVkakfERAlOCzRAGizhEmG0FIpuJ24pOE0pBWPaBakuGgtmZ4t36U16NbpAGO1AG64ksMoEjARfAS2ogKkTYNBg7hFnB3azxtoSe0QYG3dnPDYBR9ordFc5WvmHq2ZIDMzvSixItmQk8ecrOQGdcROsw5dO0mD93CPtpOVtJDZEMgG6HlHFGkaQUc7GUbCzwzrOx2M6u4owEmq95nJ9qXRGAu3P2fsbhBHJc8FpTOVYrcewA/GhjwboMr1Nx9W0K61cXmvZ5XTfm7mlBNtkygB1mtsiijdErURj3KqORKcaQO64VjIDaUfdPFeOE8ZGewE0mLdJwL+C+e2CGSu6KdMSc5IlfqoEzOOkWzXRXFKe7zft3NcbyFpCN2+l4BJaXpOfx5mP6/0a7o+x6WeKhDEuAzYs0MCjvJFKKVVONtujkglFlNJ9FX6D2T/G45+upv6fKc/R8xdUW89vJ8WbJKyGK3q8Y5oJt2oar68v9ByTGZtZYiFcU+YgPU8mf+9lf7n1uP4XY+j3JL/0Inl2iuLpUh0sAWUuiDFgTZKGBgu1Nokf19/Xc99+arcfyEHtVxI1WJDVOfrbU8ZHSvCByDEaZmCsVsXxYtH3xjs8Vutpwy0xyXNTSJr4K03yzT8izfncI7lfk8GKS97BOcTZjdL8cwQq50qu+DpcIgxWxAmbdrmBfiB+W+RBbzp5u7ge/R0xD7+GYq/lYOGj54NPOddg6nuoxOiTJsWoC7UjSNprW3EQrMFSYd3xuL3AZnQDGbmAHCQD+eWl20E7H4jmYYkj1BMj9tc4zXlnVKkNhDS6hm+UhAtiyUw5TSEwOqM/rM07w3F8BOgQpmCU2IGOV2PdL7GxkDcQzsTXFwvvCN1wGWCX6Qy7tbOHf/uUDhUrjogztzSWWxfVNwBWE8rl+jjYpsq9sVySTqrEAxGv9umDX05HjBjgrmPNC8lCKgb3JrmJTed9BKTVxYPg+xCYZ5ApXcz4Z9ij8S6srj0NtlPLd3CIjWuhpZNMRCmPMi75qmifeto3ghL76vdMTCvvMOzCiZj4UWiHzoRQh0A347JsCq2tvtBp6v6//O9wPFpnloSnDkydsSpb6FqjSSZa7TgLlR05T10qmvve2dzZEp/2iMg3JHlz8nv9HPk6tFWh9PLCbpSsRSZx0JbLUxwocSi15N683vX7Sf80eXNybzjv1TlLplX7L6wXe3sSFQAA"
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/CDKMetadata/Default"
+   }
+  },
+  "ExportsWriteruseast2828FA26B86FBEFA7": {
+   "Type": "Custom::CrossRegionExportWriter",
+   "Properties": {
+    "ServiceToken": {
+     "Fn::GetAtt": [
+      "CustomCrossRegionExportWriterCustomResourceProviderHandlerD8786E8A",
+      "Arn"
+     ]
+    },
+    "WriterProps": {
+     "region": "us-east-2",
+     "exports": {
+      "/cdk/exports/SearchWorkflowStack/VideoAiAgentCdkStackuseast1FnGetAttAppSyncConstructVideoAgentVectorBucketVectorBucketCustomResourceDACBE238VectorBucketName1CD3E0A7": {
+       "Fn::GetAtt": [
+        "AppSyncConstructVideoAgentVectorBucketVectorBucketCustomResourceDACBE238",
+        "VectorBucketName"
+       ]
+      },
+      "/cdk/exports/SearchWorkflowStack/VideoAiAgentCdkStackuseast1RefAppSyncConstructVideoMediaBucket48B42D33E3180BE7": {
+       "Ref": "AppSyncConstructVideoMediaBucket48B42D33"
+      },
+      "/cdk/exports/SearchWorkflowStack/VideoAiAgentCdkStackuseast1RefAppSyncConstructVideoAgentEventBus0C1232AD04358D94": {
+       "Ref": "AppSyncConstructVideoAgentEventBus0C1232AD"
+      }
+     }
+    }
+   },
+   "UpdateReplacePolicy": "Delete",
+   "DeletionPolicy": "Delete",
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/ExportsWriteruseast2828FA26B/Resource/Default"
+   }
+  },
+  "CustomCrossRegionExportWriterCustomResourceProviderRoleC951B1E1": {
+   "Type": "AWS::IAM::Role",
+   "Properties": {
+    "AssumeRolePolicyDocument": {
+     "Version": "2012-10-17",
+     "Statement": [
+      {
+       "Action": "sts:AssumeRole",
+       "Effect": "Allow",
+       "Principal": {
+        "Service": "lambda.amazonaws.com"
+       }
+      }
+     ]
+    },
+    "ManagedPolicyArns": [
+     {
+      "Fn::Sub": "arn:${AWS::Partition}:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+     }
+    ],
+    "Policies": [
+     {
+      "PolicyName": "Inline",
+      "PolicyDocument": {
+       "Version": "2012-10-17",
+       "Statement": [
+        {
+         "Effect": "Allow",
+         "Resource": [
+          "arn:aws:ssm:us-east-2:132260253285:parameter/cdk/exports/*"
+         ],
+         "Action": [
+          "ssm:DeleteParameters",
+          "ssm:ListTagsForResource",
+          "ssm:GetParameters",
+          "ssm:PutParameter"
+         ]
+        }
+       ]
+      }
+     }
+    ]
+   },
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/Custom::CrossRegionExportWriterCustomResourceProvider/Role"
+   }
+  },
+  "CustomCrossRegionExportWriterCustomResourceProviderHandlerD8786E8A": {
+   "Type": "AWS::Lambda::Function",
+   "Properties": {
+    "Code": {
+     "S3Bucket": "cdk-hnb659fds-assets-132260253285-us-east-1",
+     "S3Key": "8a17fb3ceee821f797100bf65fa3047c164a08c03aa5a07fbcff9a676fb73b97.zip"
+    },
+    "Timeout": 900,
+    "MemorySize": 128,
+    "Handler": "__entrypoint__.handler",
+    "Role": {
+     "Fn::GetAtt": [
+      "CustomCrossRegionExportWriterCustomResourceProviderRoleC951B1E1",
+      "Arn"
+     ]
+    },
+    "Runtime": "nodejs22.x"
+   },
+   "DependsOn": [
+    "CustomCrossRegionExportWriterCustomResourceProviderRoleC951B1E1"
+   ],
+   "Metadata": {
+    "aws:cdk:path": "VideoAiAgentCdkStack/Custom::CrossRegionExportWriterCustomResourceProvider/Handler",
+    "aws:asset:path": "asset.8a17fb3ceee821f797100bf65fa3047c164a08c03aa5a07fbcff9a676fb73b97",
+    "aws:asset:property": "Code"
+   }
+  }
+ },
+ "Outputs": {
+  "AppSyncConstructGraphQLAPIEndpoint8632EF83": {
+   "Description": " The GraphQL API Endpoint",
+   "Value": {
+    "Fn::GetAtt": [
+     "AppSyncConstructvideoagentapi25C4D16D",
+     "GraphQLUrl"
+    ]
+   }
+  }
+ },
+ "Parameters": {
+  "BootstrapVersion": {
+   "Type": "AWS::SSM::Parameter::Value<String>",
+   "Default": "/cdk-bootstrap/hnb659fds/version",
+   "Description": "Version of the CDK Bootstrap resources in this environment, automatically retrieved from SSM Parameter Store. [cdk:skip]"
+  }
+ },
+ "Rules": {
+  "CheckBootstrapVersion": {
+   "Assertions": [
+    {
+     "Assert": {
+      "Fn::Not": [
+       {
+        "Fn::Contains": [
+         [
+          "1",
+          "2",
+          "3",
+          "4",
+          "5"
+         ],
+         {
+          "Ref": "BootstrapVersion"
+         }
+        ]
+       }
+      ]
+     },
+     "AssertDescription": "CDK bootstrap stack version 6 required. Please run 'cdk bootstrap' with a recent version of the CDK CLI."
+    }
+   ]
+  }
+ }
+}

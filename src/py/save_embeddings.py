@@ -32,16 +32,20 @@ def process_jsonl_file(key):
         batch = []
         batch_size = 20 
         
-        for line in stream:
+        for i, line in enumerate(stream):
             if not line: continue
             
             try:
                 record = json.loads(line)
                 
-               
+                # Create unique key for segment using line index to guarantee uniqueness
+                # format: id-lineIndex (e.g. 12345-0, 12345-1)
+                base_id = str(record.get('id'))
+                unique_key = f"{base_id}-{i}"
+
                 vector_entry = {
-                    'key': str(record.get('id')), 
-                    'data': record.get('embedding'), 
+                    'key': unique_key, 
+                    'data': {"float32": record.get('embedding')}, 
                 }
                 
                 if 'metadata' in record:

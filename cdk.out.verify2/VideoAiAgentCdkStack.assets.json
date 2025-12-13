@@ -1,0 +1,141 @@
+{
+  "version": "48.0.0",
+  "files": {
+    "8781d893470b333e7b602c24cc571099b19860f20e73e30a03b5c1a028238e37": {
+      "displayName": "AppSyncConstruct/VideoAgentVectorBucket/S3VectorsBucketHandler/Code",
+      "source": {
+        "path": "asset.8781d893470b333e7b602c24cc571099b19860f20e73e30a03b5c1a028238e37",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "132260253285-us-east-1-e9c55361": {
+          "bucketName": "cdk-hnb659fds-assets-132260253285-us-east-1",
+          "objectKey": "8781d893470b333e7b602c24cc571099b19860f20e73e30a03b5c1a028238e37.zip",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::132260253285:role/cdk-hnb659fds-file-publishing-role-132260253285-us-east-1"
+        }
+      }
+    },
+    "bdc104ed9cab1b5b6421713c8155f0b753380595356f710400609664d3635eca": {
+      "displayName": "AppSyncConstruct/VideoAgentVectorBucket/S3VectorsProvider/framework-onEvent/Code",
+      "source": {
+        "path": "asset.bdc104ed9cab1b5b6421713c8155f0b753380595356f710400609664d3635eca",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "132260253285-us-east-1-538f27ad": {
+          "bucketName": "cdk-hnb659fds-assets-132260253285-us-east-1",
+          "objectKey": "bdc104ed9cab1b5b6421713c8155f0b753380595356f710400609664d3635eca.zip",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::132260253285:role/cdk-hnb659fds-file-publishing-role-132260253285-us-east-1"
+        }
+      }
+    },
+    "2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d": {
+      "displayName": "LogRetentionaae0aa3c5b4d4f87b02d85b201efdd8a/Code",
+      "source": {
+        "path": "asset.2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "132260253285-us-east-1-d3b4dc3c": {
+          "bucketName": "cdk-hnb659fds-assets-132260253285-us-east-1",
+          "objectKey": "2819175352ad1ce0dae768e83fc328fb70fb5f10b4a8ff0ccbcb791f02b0716d.zip",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::132260253285:role/cdk-hnb659fds-file-publishing-role-132260253285-us-east-1"
+        }
+      }
+    },
+    "48e8bfbb18f3ae589518d9b38a04c658dbd942f28b65c190f482bfe74d264db3": {
+      "displayName": "AppSyncConstruct/saveEmbeddingsFunction/Code",
+      "source": {
+        "path": "asset.48e8bfbb18f3ae589518d9b38a04c658dbd942f28b65c190f482bfe74d264db3",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "132260253285-us-east-1-efbab8ca": {
+          "bucketName": "cdk-hnb659fds-assets-132260253285-us-east-1",
+          "objectKey": "48e8bfbb18f3ae589518d9b38a04c658dbd942f28b65c190f482bfe74d264db3.zip",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::132260253285:role/cdk-hnb659fds-file-publishing-role-132260253285-us-east-1"
+        }
+      }
+    },
+    "6a6bc9bf59c4e8b17f122ecfa1422e8fe6382d1fc058a939824ca68bac93d9a4": {
+      "displayName": "AppSyncConstruct/GenerateEmbeddingsStateMachine/DefinitionBody",
+      "source": {
+        "path": "asset.6a6bc9bf59c4e8b17f122ecfa1422e8fe6382d1fc058a939824ca68bac93d9a4.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "132260253285-us-east-1-b92c7465": {
+          "bucketName": "cdk-hnb659fds-assets-132260253285-us-east-1",
+          "objectKey": "6a6bc9bf59c4e8b17f122ecfa1422e8fe6382d1fc058a939824ca68bac93d9a4.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::132260253285:role/cdk-hnb659fds-file-publishing-role-132260253285-us-east-1"
+        }
+      }
+    },
+    "43334886176ca5a72244d85172eeb0cc8f322053acc55c7128b5a819aba693e2": {
+      "displayName": "AppSyncConstruct/invokeWorkflowFunction/Code",
+      "source": {
+        "path": "asset.43334886176ca5a72244d85172eeb0cc8f322053acc55c7128b5a819aba693e2",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "132260253285-us-east-1-69fa80eb": {
+          "bucketName": "cdk-hnb659fds-assets-132260253285-us-east-1",
+          "objectKey": "43334886176ca5a72244d85172eeb0cc8f322053acc55c7128b5a819aba693e2.zip",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::132260253285:role/cdk-hnb659fds-file-publishing-role-132260253285-us-east-1"
+        }
+      }
+    },
+    "cad068c0478cc7ef1a90da1d6e676e907208635f9a2c7737d021f99e58e7546d": {
+      "displayName": "AppSyncConstruct/video-agent-api/invokeSearchCutWorkflowFunctionResolver/Code",
+      "source": {
+        "path": "asset.cad068c0478cc7ef1a90da1d6e676e907208635f9a2c7737d021f99e58e7546d.js",
+        "packaging": "file"
+      },
+      "destinations": {
+        "132260253285-us-east-1-06fff79e": {
+          "bucketName": "cdk-hnb659fds-assets-132260253285-us-east-1",
+          "objectKey": "cad068c0478cc7ef1a90da1d6e676e907208635f9a2c7737d021f99e58e7546d.js",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::132260253285:role/cdk-hnb659fds-file-publishing-role-132260253285-us-east-1"
+        }
+      }
+    },
+    "8a17fb3ceee821f797100bf65fa3047c164a08c03aa5a07fbcff9a676fb73b97": {
+      "displayName": "VideoAiAgentCdkStack/Custom::CrossRegionExportWriterCustomResourceProvider Code",
+      "source": {
+        "path": "asset.8a17fb3ceee821f797100bf65fa3047c164a08c03aa5a07fbcff9a676fb73b97",
+        "packaging": "zip"
+      },
+      "destinations": {
+        "132260253285-us-east-1-717e92bc": {
+          "bucketName": "cdk-hnb659fds-assets-132260253285-us-east-1",
+          "objectKey": "8a17fb3ceee821f797100bf65fa3047c164a08c03aa5a07fbcff9a676fb73b97.zip",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::132260253285:role/cdk-hnb659fds-file-publishing-role-132260253285-us-east-1"
+        }
+      }
+    },
+    "55eab6276c8576f9957afed0a022a2af1e4d03ce2c902e297d71d5b84211a4e0": {
+      "displayName": "VideoAiAgentCdkStack Template",
+      "source": {
+        "path": "VideoAiAgentCdkStack.template.json",
+        "packaging": "file"
+      },
+      "destinations": {
+        "132260253285-us-east-1-bc23df3f": {
+          "bucketName": "cdk-hnb659fds-assets-132260253285-us-east-1",
+          "objectKey": "55eab6276c8576f9957afed0a022a2af1e4d03ce2c902e297d71d5b84211a4e0.json",
+          "region": "us-east-1",
+          "assumeRoleArn": "arn:${AWS::Partition}:iam::132260253285:role/cdk-hnb659fds-file-publishing-role-132260253285-us-east-1"
+        }
+      }
+    }
+  },
+  "dockerImages": {}
+}
