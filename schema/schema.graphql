@@ -10,6 +10,35 @@ type Query {
 
 type Mutation {
   search(text: String!): Boolean! @aws_api_key
+  approveVideo(
+    requestId: String!
+    status: String!
+    message: String
+    callbackId: String
+    videoUrl: String
+  ): VideoStatus @aws_api_key
+  
+  
+  updateVideoStatus(
+    requestId: String!
+    status: String!
+    message: String
+    callbackId: String
+    videoUrl: String
+  ): VideoStatus @aws_iam @aws_api_key
+}
 
+type Subscription {
+  onVideoStatusUpdate(requestId: String): VideoStatus
+    @aws_subscribe(mutations: ["updateVideoStatus"])
+    @aws_api_key
+}
+
+type VideoStatus @aws_iam @aws_api_key {
+  requestId: String!
+  status: String!
+  message: String
+  callbackId: String
+  videoUrl: String
 }
 

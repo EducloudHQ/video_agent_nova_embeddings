@@ -12,6 +12,8 @@ import * as s3Vectors from "cdk-s3-vectors";
 import * as s3 from "aws-cdk-lib/aws-s3";
 import * as s3n from "aws-cdk-lib/aws-s3-notifications";
 import * as sfn from "aws-cdk-lib/aws-stepfunctions";
+import * as events from "aws-cdk-lib/aws-events";
+import * as targets from "aws-cdk-lib/aws-events-targets";
 
 
 import { PythonFunction } from "@aws-cdk/aws-lambda-python-alpha";
@@ -117,7 +119,11 @@ export class AppSyncConstruct extends Construct {
             description: "Default API key for Ai Writer API",
             expires: cdk.Expiration.atDate(keyExpirationDate),
           },
+          
         },
+         additionalAuthorizationModes: [
+          { authorizationType: appsync.AuthorizationType.IAM },
+        ],
       },
       xrayEnabled: true,
       logConfig: {
@@ -128,24 +134,13 @@ export class AppSyncConstruct extends Construct {
     // Create data sources
     const noneDs = this.api.addNoneDataSource("None");
 
-       // Create a data source for Bedrock Retrieve and Generate
-    const bedrockRetrieveAndGenerateDS = this.api.addHttpDataSource(
-      "BedrockRetrieveAndGenerateDS",
-      `https://bedrock-agent-runtime.us-east-1.amazonaws.com`,
-      {
-        authorizationConfig: {
-          signingRegion: "us-east-1",
-          signingServiceName: "bedrock",
-        },
-      }
-    );
 
    
   
     // dedicated log group (avoid logRetention deprecation)
-    const workflowFunctionLogs = new logs.LogGroup(
+    const approveVideoFunctionLogs = new logs.LogGroup(
       this,
-      "workflowFunctionLogs",
+      "approveVideoFunctionLogs",
       {
         retention: logs.RetentionDays.ONE_WEEK,
       }
@@ -269,6 +264,26 @@ export class AppSyncConstruct extends Construct {
         },
       }
     );
+    const approveVideoFunction = new PythonFunction(
+      this,
+      "approveVideoDurableFunction",
+      {
+        entry: "./src/py/",
+        handler: "handler",
+        index: "approve_video.py",
+        runtime: cdk.aws_lambda.Runtime.PYTHON_3_13,
+        memorySize: 1024,
+        durableConfig: {
+          executionTimeout: cdk.Duration.days(365),
+         retentionPeriod: cdk.Duration.days(7),
+        },
+        timeout: cdk.Duration.minutes(10),
+        logGroup: approveVideoFunctionLogs,
+        tracing: cdk.aws_lambda.Tracing.ACTIVE,
+       
+      
+      }
+    );
 
   
      // Configure the S3 bucket to trigger the Lambda function when files are uploaded to the videos/ path
@@ -309,12 +324,123 @@ export class AppSyncConstruct extends Construct {
     const videoAgentEventBus = new cdk.aws_events.EventBus(this, "VideoAgentEventBus", {
       eventBusName: "VideoAgentEventBus",
     });
+  // Create a role for AppSync to be a target of EventBridge rules
+    const appSyncEventBridgeRole = new iam.Role(
+      this,
+      "AppSyncEventBridgeRole",
+      {
+        assumedBy: new iam.ServicePrincipal("events.amazonaws.com"),
+        description: "Role for EventBridge to invoke AppSync mutations",
+      }
+    );
+      // Grant permissions to invoke AppSync mutations
+    appSyncEventBridgeRole.addToPolicy(
+      new iam.PolicyStatement({
+        effect: iam.Effect.ALLOW,
+        actions: ["appsync:GraphQL"],
+        resources: [`${this.api.arn}/types/Mutation/*`],
+      })
+    );
+/*
+     // Create a rule for order status responses
+    new events.CfnRule(this, "OrderStatusResponse", {
+      eventBusName: eventBus.eventBusName,
+      eventPattern: {
+        source: ["orderStatus.response"],
+        detailType: ["order.status"],
+      },
+      targets: [
+        {
+          id: "OrderStatusResponse",
+          arn: (this.api.node.defaultChild as appsync.CfnGraphQLApi)
+            .attrGraphQlEndpointArn,
+          roleArn: appSyncEventBridgeRole.roleArn,
+          appSyncParameters: {
+            graphQlOperation: `mutation OrderStatus($input:OrderResponseInput!) { orderStatus(input: $input) { status orderId callbackId} }`,
+          },
+          inputTransformer: {
+            inputPathsMap: {
+              status: "$.detail.status",
+              orderId: "$.detail.orderId",
+              callbackId: "$.detail.callbackId",
+            },
+            inputTemplate: JSON.stringify({
+              input:{
+                status: "<status>",
+              orderId: "<orderId>",
+              callbackId: "<callbackId>",
+              }
+            }),
+          },
+        },
+      ],
+    });
+  
+  */
+
+    // 3. Create EventBridge Rule
+    const statusRule = new events.Rule(this, "VideoStatusRule", {
+      eventBus: videoAgentEventBus,
+      eventPattern: {
+        source: ["video.pipeline"],
+        detailType: ["video.processing.status"],
+      },
+    });
+
+    // 4. Create AppSync Target
+    statusRule.addTarget(
+      new targets.AppSync(this.api, {
+        graphQLOperation: `
+          mutation UpdateVideoStatus(
+            $requestId: String!
+            $status: String!
+            $message: String
+            $callbackId: String
+            $videoUrl: String
+          ) {
+            updateVideoStatus(
+              requestId: $requestId
+              status: $status
+              message: $message
+              callbackId: $callbackId
+              videoUrl: $videoUrl
+            ) {
+              requestId
+              status
+              message
+              callbackId
+              videoUrl
+            }
+          }
+        `,
+        variables: events.RuleTargetInput.fromObject({
+          requestId: events.EventField.fromPath("$.detail.requestId"),
+          status: events.EventField.fromPath("$.detail.status"),
+          message: events.EventField.fromPath("$.detail.message"),
+          callbackId: events.EventField.fromPath("$.detail.callbackId"),
+          videoUrl: events.EventField.fromPath("$.detail.videoUrl"),
+        }),
+      })
+    );
+
+     const logsGroup = new logs.LogGroup(this, "EventsLogGroup", {
+      logGroupName: "/aws/events/RealtimeAgentsEventBus/logs",
+      retention: logs.RetentionDays.ONE_WEEK,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
+    });
+
+    // Create a rule tolog all events for debugging
+    new events.Rule(this, "CatchAllLogRule", {
+      ruleName: "catch-all-events",
+      eventBus: videoAgentEventBus,
+      eventPattern: {
+        source: events.Match.prefix(""),
+      },
+      targets: [new targets.CloudWatchLogGroup(logsGroup)],
+    });
+
     this.eventBusName = videoAgentEventBus.eventBusName;
 
-    // Import FFmpeg Layer
-
-
-   
 
   
     const invokeSearchCutWorkflowFunction = new PythonFunction(this,
@@ -339,6 +465,29 @@ export class AppSyncConstruct extends Construct {
         },
       }
     );
+
+       // Create resolvers for mutations
+    this.api.createResolver("UpdateVideoStatus", {
+      typeName: "Mutation",
+      fieldName: "updateVideoStatus",
+      runtime: appsync.FunctionRuntime.JS_1_0_0,
+      dataSource: noneDs,
+      code: appsync.Code.fromAsset("./resolvers/updateVideoStatus.js"),
+    });
+
+      this.api
+      .addLambdaDataSource("approveVideoDataSource", approveVideoFunction)
+      .createResolver("approveVideoFunctionResolver", {
+        typeName: "Mutation",
+        fieldName: "approveVideo",
+        code: appsync.Code.fromAsset(
+          path.join(__dirname, "../resolvers/invoke/invoke.js")
+        ),
+        runtime: appsync.FunctionRuntime.JS_1_0_0,
+      });
+
+  
+
 
     // Grant permission to invoke the cross-region Lambda
     invokeSearchCutWorkflowFunction.addToRolePolicy(
