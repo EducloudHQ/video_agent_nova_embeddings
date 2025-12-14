@@ -334,7 +334,7 @@ export class AppSyncConstruct extends Construct {
           }
         ),
         environment: {
-          SEARCH_CUT_WORKFLOW_FUNCTION_ARN: `arn:aws:lambda:us-east-2:${cdk.Stack.of(this).account}:function:SearchCutWorkflowFunction`,
+          SEARCH_CUT_WORKFLOW_FUNCTION_ARN: `arn:aws:lambda:us-east-2:${cdk.Stack.of(this).account}:function:SearchCutWorkflowFunction:prod`,
           TARGET_REGION: "us-east-2"
         },
       }
@@ -344,7 +344,7 @@ export class AppSyncConstruct extends Construct {
     invokeSearchCutWorkflowFunction.addToRolePolicy(
       new iam.PolicyStatement({
         actions: ["lambda:InvokeFunction"],
-        resources: [`arn:aws:lambda:us-east-2:${cdk.Stack.of(this).account}:function:SearchCutWorkflowFunction`],
+        resources: [`arn:aws:lambda:us-east-2:${cdk.Stack.of(this).account}:function:SearchCutWorkflowFunction:prod`],
         effect: iam.Effect.ALLOW,
       })
     );

@@ -33,6 +33,7 @@
         }
       },
       "Resource": "arn:aws:states:::aws-sdk:bedrockruntime:startAsyncInvoke",
+      "Output": "{% $merge([$states.result, $states.input]) %}",
       "Next": "Wait"
     },
     "Wait": {
@@ -67,8 +68,11 @@
       "Resource": "arn:aws:states:::lambda:invoke",
       "Output": "{% $states.result.Payload %}",
       "Arguments": {
-        "FunctionName": "${FUNCTION_ARN}",
-        "Payload": "{% $states.input %}"
+         "FunctionName": "${FUNCTION_ARN}",
+        "Payload": {
+          "mediaFileUri": "{% $states.context.Execution.Input.mediaFileUri %}",
+          "S3Uri": "{% $states.input.OutputDataConfig.S3OutputDataConfig.S3Uri %}"
+        }
       },
       "Retry": [
         {

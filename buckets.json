@@ -1,0 +1,1264 @@
+{
+    "Buckets": [
+        {
+            "Name": "100days0fserverless-storage-b4e49d27-test105911-legacy",
+            "CreationDate": "2023-07-26T10:56:43+00:00"
+        },
+        {
+            "Name": "100days0fserverless-storage-b4e49d27-test112435-test",
+            "CreationDate": "2024-05-30T04:18:46+00:00"
+        },
+        {
+            "Name": "100days0fserverless-storage-b4e49d27-test125228-readme",
+            "CreationDate": "2023-05-04T12:44:29+00:00"
+        },
+        {
+            "Name": "100days0fserverless-storage-b4e49d27-test152424-staging",
+            "CreationDate": "2023-07-05T14:44:43+00:00"
+        },
+        {
+            "Name": "100days0fserverless-storage-b4e49d27-test92101-dev",
+            "CreationDate": "2023-03-28T08:29:53+00:00"
+        },
+        {
+            "Name": "100days0fserverless-storage-b4e49d27-test94246-dev",
+            "CreationDate": "2023-03-28T09:44:04+00:00"
+        },
+        {
+            "Name": "132260253285-us-east-1-email-bucket",
+            "CreationDate": "2025-05-12T11:47:49+00:00"
+        },
+        {
+            "Name": "132260253285-us-east-1-media",
+            "CreationDate": "2025-06-30T11:23:02+00:00"
+        },
+        {
+            "Name": "132260253285-us-east-1-media-bucket",
+            "CreationDate": "2025-10-06T21:15:02+00:00"
+        },
+        {
+            "Name": "132260253285-us-east-1-scheduled-posts-media",
+            "CreationDate": "2025-06-30T11:23:02+00:00"
+        },
+        {
+            "Name": "132260253285-us-east-1-video-media-bucket",
+            "CreationDate": "2025-12-13T04:02:35+00:00"
+        },
+        {
+            "Name": "132260253285-us-east-2-email-bucket",
+            "CreationDate": "2025-09-02T18:56:48+00:00"
+        },
+        {
+            "Name": "846-s3-email-bucket",
+            "CreationDate": "2025-05-30T21:12:08+00:00"
+        },
+        {
+            "Name": "acmsstack-acmspipelinepipelineartifactsbuckete3b12-6yyjumyc3eb2",
+            "CreationDate": "2024-03-31T23:37:28+00:00"
+        },
+        {
+            "Name": "acmsstack-acmspipelinepipelineartifactsbuckete3b12-ch4kpo0lq0ci",
+            "CreationDate": "2024-06-28T17:38:20+00:00"
+        },
+        {
+            "Name": "acmsstack-acmspipelinepipelineartifactsbuckete3b12-g2gpba16ic91",
+            "CreationDate": "2024-04-03T09:08:47+00:00"
+        },
+        {
+            "Name": "acmsstack-acmspipelinepipelineartifactsbuckete3b12-hovoh4hvwo8u",
+            "CreationDate": "2024-06-28T19:31:36+00:00"
+        },
+        {
+            "Name": "acmsstack-acmspipelinepipelineartifactsbuckete3b12-lu5sayzpdzbi",
+            "CreationDate": "2024-04-03T08:06:34+00:00"
+        },
+        {
+            "Name": "acmsstack-acmspipelinepipelineartifactsbuckete3b12-qzcpowjti7ne",
+            "CreationDate": "2024-06-28T19:48:01+00:00"
+        },
+        {
+            "Name": "acmsstack-acmspipelinepipelineartifactsbuckete3b12-wuw6gwtpde9a",
+            "CreationDate": "2024-03-29T12:18:44+00:00"
+        },
+        {
+            "Name": "acmsstack-acmspipelinepipelineartifactsbuckete3b12-xbxks58vhrg9",
+            "CreationDate": "2024-04-03T11:34:51+00:00"
+        },
+        {
+            "Name": "agentcore-gateway-132260253285-us-east-1",
+            "CreationDate": "2025-09-24T13:35:39+00:00"
+        },
+        {
+            "Name": "agentcore-gateway-us-east-1-us-east-1",
+            "CreationDate": "2025-10-03T12:44:05+00:00"
+        },
+        {
+            "Name": "agentpipelinestack-bedrockagentpipelineartifactsbu-c3rs9pagbmi3",
+            "CreationDate": "2025-08-05T05:25:46+00:00"
+        },
+        {
+            "Name": "agentpipelinestack-bedrockagentpipelineartifactsbu-ibxhqr73mtb2",
+            "CreationDate": "2025-08-05T05:35:38+00:00"
+        },
+        {
+            "Name": "agentpipelinestack-bedrockagentpipelineartifactsbu-ojmhy5h5ztvy",
+            "CreationDate": "2025-08-05T05:50:08+00:00"
+        },
+        {
+            "Name": "agentpipelinestack-bedrockagentpipelineartifactsbu-syyxrh58zf16",
+            "CreationDate": "2025-08-05T06:08:22+00:00"
+        },
+        {
+            "Name": "agentpipelinestack-bedrockagentpipelineartifactsbu-u3rmuwv8kipb",
+            "CreationDate": "2025-08-05T10:13:22+00:00"
+        },
+        {
+            "Name": "agentsintrostack-ailearningbucketec5711a2-tpd3m96okqwp",
+            "CreationDate": "2025-03-20T13:19:36+00:00"
+        },
+        {
+            "Name": "ai-learning-knowledge",
+            "CreationDate": "2025-03-11T09:52:00+00:00"
+        },
+        {
+            "Name": "aiecommercesupportsimulators-websitebucket75c24d94-tpxrflpzi2xa",
+            "CreationDate": "2025-05-11T16:05:25+00:00"
+        },
+        {
+            "Name": "aiecommercesupportsimulators-websitebucket75c24d94-uop4ecfft6ex",
+            "CreationDate": "2025-05-11T12:36:35+00:00"
+        },
+        {
+            "Name": "airbnbclonestack-pipelineartifactsbucketaea9a052-c8l0ojuarkb9",
+            "CreationDate": "2024-05-11T07:35:43+00:00"
+        },
+        {
+            "Name": "airbnbclonestack-pipelineartifactsbucketaea9a052-exy49niqaqbr",
+            "CreationDate": "2024-05-11T00:58:06+00:00"
+        },
+        {
+            "Name": "airbnbclonestack-pipelineartifactsbucketaea9a052-kwwdhkglnisg",
+            "CreationDate": "2024-05-11T04:02:13+00:00"
+        },
+        {
+            "Name": "airbnbclonestack-pipelineartifactsbucketaea9a052-pwknv1a0fvxv",
+            "CreationDate": "2024-05-11T08:14:53+00:00"
+        },
+        {
+            "Name": "airbnbclonestack-pipelineartifactsbucketaea9a052-qdvr4s8v8cwc",
+            "CreationDate": "2024-05-11T08:30:48+00:00"
+        },
+        {
+            "Name": "airbnbclonestack-pipelineartifactsbucketaea9a052-vweawi1eqshh",
+            "CreationDate": "2024-10-31T18:14:04+00:00"
+        },
+        {
+            "Name": "airbnbclonestack-pipelinetspipelineartifactsbucket-zaq5qmmko4bq",
+            "CreationDate": "2024-10-31T19:46:10+00:00"
+        },
+        {
+            "Name": "airbnbcsharpstack-airbnbpipelineartifactsbucket8a2-8cqc6f3xjamd",
+            "CreationDate": "2024-10-08T11:47:24+00:00"
+        },
+        {
+            "Name": "airbnbcsharpstack-airbnbpipelineartifactsbucket8a2-ytdsnqt5bo9c",
+            "CreationDate": "2024-10-10T14:09:37+00:00"
+        },
+        {
+            "Name": "airbnbstack-airbnbpipelineartifactsbucket8a268398-4cotqjbas5xf",
+            "CreationDate": "2024-10-22T16:06:27+00:00"
+        },
+        {
+            "Name": "airbnbstack-airbnbpipelineartifactsbucket8a268398-hw1eqxn9j3iq",
+            "CreationDate": "2024-10-22T11:54:35+00:00"
+        },
+        {
+            "Name": "airbnbstack-airbnbpipelineartifactsbucket8a268398-lg4wwwrm8nzg",
+            "CreationDate": "2024-10-22T11:27:07+00:00"
+        },
+        {
+            "Name": "amazon-connect-0082c171cfcc",
+            "CreationDate": "2024-05-19T17:03:49+00:00"
+        },
+        {
+            "Name": "amazon-connect-045103988dbd",
+            "CreationDate": "2024-05-19T16:28:05+00:00"
+        },
+        {
+            "Name": "amazon-connect-1d76d31ddb08",
+            "CreationDate": "2024-11-30T12:52:44+00:00"
+        },
+        {
+            "Name": "amazon-connect-602ec71557c5",
+            "CreationDate": "2024-11-30T11:47:08+00:00"
+        },
+        {
+            "Name": "amazon-connect-e1de6ac6565b",
+            "CreationDate": "2024-06-11T11:07:35+00:00"
+        },
+        {
+            "Name": "amplify-100days0fserverless-dev-92101-deployment",
+            "CreationDate": "2023-03-28T08:21:11+00:00"
+        },
+        {
+            "Name": "amplify-100days0fserverless-migration-101333-deployment",
+            "CreationDate": "2023-03-28T09:13:42+00:00"
+        },
+        {
+            "Name": "amplify-100days0fserverless-staging-152424-deployment",
+            "CreationDate": "2023-07-05T14:24:38+00:00"
+        },
+        {
+            "Name": "amplify-amplify-test-dev-161623-deployment",
+            "CreationDate": "2023-08-29T11:59:14+00:00"
+        },
+        {
+            "Name": "amplify-amplifyf61302a66b154-staging-72029-deployment",
+            "CreationDate": "2021-05-23T07:20:35+00:00"
+        },
+        {
+            "Name": "amplify-amplifysignin-dev-100858-deployment",
+            "CreationDate": "2023-08-15T09:09:10+00:00"
+        },
+        {
+            "Name": "amplify-amplifyvitereactt-amplifydataamplifycodege-7enpwerisdod",
+            "CreationDate": "2025-02-04T09:18:49+00:00"
+        },
+        {
+            "Name": "amplify-amplifyvitereactt-amplifydataamplifycodege-hs0mwmydeon8",
+            "CreationDate": "2025-01-24T23:48:22+00:00"
+        },
+        {
+            "Name": "amplify-amplifyvitereactt-amplifydataamplifycodege-tud6ggnrm1yx",
+            "CreationDate": "2024-12-31T12:20:59+00:00"
+        },
+        {
+            "Name": "amplify-amplifyvitereactt-songstoragebucketee5136b-ea4o3da8iz6r",
+            "CreationDate": "2024-12-31T12:21:12+00:00"
+        },
+        {
+            "Name": "amplify-amplifyvuetemplat-amplifydataamplifycodege-mgfpokchqglj",
+            "CreationDate": "2025-10-23T10:12:02+00:00"
+        },
+        {
+            "Name": "amplify-authentication-dev-45359-deployment",
+            "CreationDate": "2023-09-26T03:54:28+00:00"
+        },
+        {
+            "Name": "amplify-awsamplifygen2-pr-amplifydataamplifycodege-bn2wmppayyty",
+            "CreationDate": "2024-05-29T03:00:36+00:00"
+        },
+        {
+            "Name": "amplify-awsamplifygen2-pr-amplifyteamdrivebucket28-dumyksecf2de",
+            "CreationDate": "2024-07-16T13:15:45+00:00"
+        },
+        {
+            "Name": "amplify-brainy-kogbi-sand-amplifydataamplifycodege-vqysop88h5ty",
+            "CreationDate": "2024-05-21T14:13:13+00:00"
+        },
+        {
+            "Name": "amplify-budgettracker-dev-6b566-deployment",
+            "CreationDate": "2024-05-26T00:29:13+00:00"
+        },
+        {
+            "Name": "amplify-budgettracker-dev-db461-deployment",
+            "CreationDate": "2024-05-14T00:56:39+00:00"
+        },
+        {
+            "Name": "amplify-commerce-staging-193514-deployment",
+            "CreationDate": "2023-10-03T19:35:18+00:00"
+        },
+        {
+            "Name": "amplify-commerce-staging-93837-deployment",
+            "CreationDate": "2023-10-27T08:38:48+00:00"
+        },
+        {
+            "Name": "amplify-communityday-dev-162534-deployment",
+            "CreationDate": "2024-01-15T15:25:50+00:00"
+        },
+        {
+            "Name": "amplify-d1g4oa3g7n36za-ma-amplifydataamplifycodege-zueiuhb2ld1d",
+            "CreationDate": "2025-01-16T09:49:26+00:00"
+        },
+        {
+            "Name": "amplify-d1kiq3f3cyt9hv-ma-amplifydataamplifycodege-ewr5pguj8xds",
+            "CreationDate": "2025-10-23T09:07:01+00:00"
+        },
+        {
+            "Name": "amplify-d1twti1ffo94b8-ma-amplifydataamplifycodege-hjfbxnb4ayqq",
+            "CreationDate": "2025-07-16T16:47:31+00:00"
+        },
+        {
+            "Name": "amplify-d1twti1ffo94b8-ma-modelintrospectionschema-py2frn4otzmb",
+            "CreationDate": "2025-07-24T12:07:26+00:00"
+        },
+        {
+            "Name": "amplify-d1v0kcm3kpz2cc-ma-amplifydataamplifycodege-4n8jlgutf0nz",
+            "CreationDate": "2024-12-28T15:30:19+00:00"
+        },
+        {
+            "Name": "amplify-d1v0kcm3kpz2cc-ma-amplifydataamplifycodege-t5lk9ecfoptg",
+            "CreationDate": "2025-01-03T09:00:27+00:00"
+        },
+        {
+            "Name": "amplify-d1v0kcm3kpz2cc-ma-songstoragebucketee5136b-a36ccftzxax9",
+            "CreationDate": "2024-12-28T15:30:32+00:00"
+        },
+        {
+            "Name": "amplify-d1v0kcm3kpz2cc-ma-songstoragebucketee5136b-imu8w3whv7hq",
+            "CreationDate": "2025-01-03T09:00:39+00:00"
+        },
+        {
+            "Name": "amplify-d28646d58lnmcw-ma-amplifydataamplifycodege-nd3kw1rsmjum",
+            "CreationDate": "2025-07-02T13:58:32+00:00"
+        },
+        {
+            "Name": "amplify-d2ik5rigagqur3-ma-amplifydataamplifycodege-kbtbcueilyzl",
+            "CreationDate": "2025-02-04T07:57:26+00:00"
+        },
+        {
+            "Name": "amplify-d2ip4z5wpp480-mai-amplifydataamplifycodege-iqoklhujgtte",
+            "CreationDate": "2024-12-20T16:01:09+00:00"
+        },
+        {
+            "Name": "amplify-d2rm00pu1r1v5f-ma-amplifydataamplifycodege-iydzipowh6cp",
+            "CreationDate": "2025-01-17T10:26:26+00:00"
+        },
+        {
+            "Name": "amplify-d2yrv03l6hwvow-ma-amplifyteamdrivebucket28-ts944jk2zo40",
+            "CreationDate": "2024-07-17T05:49:26+00:00"
+        },
+        {
+            "Name": "amplify-d3ksvg9cp68pyk-ma-amplifydataamplifycodege-yelomri9a0c7",
+            "CreationDate": "2025-04-21T09:35:16+00:00"
+        },
+        {
+            "Name": "amplify-datastore7f19ee528000495aa895d581f208bddev-dev",
+            "CreationDate": "2023-08-16T16:11:22+00:00"
+        },
+        {
+            "Name": "amplify-datastore7f19ee528000495aa895d581f208bddev-test",
+            "CreationDate": "2023-08-29T11:59:17+00:00"
+        },
+        {
+            "Name": "amplify-datastorebf1f9c3f4d2141969c97479bae41ebtest-test",
+            "CreationDate": "2023-09-05T07:17:05+00:00"
+        },
+        {
+            "Name": "amplify-demoapp-dev-115544-deployment",
+            "CreationDate": "2023-04-24T10:55:53+00:00"
+        },
+        {
+            "Name": "amplify-demoapp-dev-120206-deployment",
+            "CreationDate": "2023-04-24T11:02:40+00:00"
+        },
+        {
+            "Name": "amplify-dl1j1queixr3z-mai-amplifydataamplifycodege-jp9ide2ffcgy",
+            "CreationDate": "2025-04-27T10:18:54+00:00"
+        },
+        {
+            "Name": "amplify-educloud-migration-be1c6-deployment",
+            "CreationDate": "2024-06-20T12:09:15+00:00"
+        },
+        {
+            "Name": "amplify-email-dev-41d16-deployment",
+            "CreationDate": "2025-09-03T03:33:43+00:00"
+        },
+        {
+            "Name": "amplify-eota-dev-f7beb-deployment",
+            "CreationDate": "2024-11-02T20:38:16+00:00"
+        },
+        {
+            "Name": "amplify-groupchat-dev-212428-deployment",
+            "CreationDate": "2023-11-29T20:24:42+00:00"
+        },
+        {
+            "Name": "amplify-healthai-ndimaret-amplifydataamplifycodege-77j25e7zejy8",
+            "CreationDate": "2025-05-19T09:12:17+00:00"
+        },
+        {
+            "Name": "amplify-healthai-ndimaret-modelintrospectionschema-y9mba0efy3bd",
+            "CreationDate": "2025-05-19T09:12:17+00:00"
+        },
+        {
+            "Name": "amplify-healthinfosystem--amplifydataamplifycodege-voodysiudhab",
+            "CreationDate": "2024-06-19T08:49:37+00:00"
+        },
+        {
+            "Name": "amplify-healthinfosystem-dev-da843-deployment",
+            "CreationDate": "2024-05-29T01:33:27+00:00"
+        },
+        {
+            "Name": "amplify-ieventsapp-pro3ie-amplifydataamplifycodege-vm79bgevmjky",
+            "CreationDate": "2024-05-13T23:33:39+00:00"
+        },
+        {
+            "Name": "amplify-interiordesignsocial-dev-4fbff-deployment",
+            "CreationDate": "2024-10-26T21:06:40+00:00"
+        },
+        {
+            "Name": "amplify-livecomments-dev-361b7-deployment",
+            "CreationDate": "2024-10-31T13:50:13+00:00"
+        },
+        {
+            "Name": "amplify-livecomments-main-04563-deployment",
+            "CreationDate": "2024-10-31T14:18:32+00:00"
+        },
+        {
+            "Name": "amplify-musicapp-dev-674cf-deployment",
+            "CreationDate": "2024-12-27T12:31:21+00:00"
+        },
+        {
+            "Name": "amplify-nuxtapp-kogbi-san-amplifydataamplifycodege-ntekchwqt97f",
+            "CreationDate": "2024-04-23T08:25:32+00:00"
+        },
+        {
+            "Name": "amplify-nuxtapp-kogbi-san-amplifydataamplifycodege-vveenv7ghnlp",
+            "CreationDate": "2024-04-25T14:10:27+00:00"
+        },
+        {
+            "Name": "amplify-react-datastore-dev-103949-deployment",
+            "CreationDate": "2023-05-05T09:39:59+00:00"
+        },
+        {
+            "Name": "amplify-reactamplified-dev-00557-deployment",
+            "CreationDate": "2023-04-26T23:06:17+00:00"
+        },
+        {
+            "Name": "amplify-reactdatastore-dev-170512-deployment",
+            "CreationDate": "2023-05-05T16:05:22+00:00"
+        },
+        {
+            "Name": "amplify-rgroup-dev-141140-deployment",
+            "CreationDate": "2023-11-07T13:12:10+00:00"
+        },
+        {
+            "Name": "amplify-rocreate-dev-8ba55-deployment",
+            "CreationDate": "2025-04-02T08:58:30+00:00"
+        },
+        {
+            "Name": "amplify-saturnmobile-dev-38975-deployment",
+            "CreationDate": "2025-06-09T11:44:36+00:00"
+        },
+        {
+            "Name": "amplify-takamgo-rosius-sa-amplifydataamplifycodege-kscsoxmjiedf",
+            "CreationDate": "2024-12-19T19:57:33+00:00"
+        },
+        {
+            "Name": "amplify-takamgo-rosius-sa-modelintrospectionschema-jgfqwkmvvsc6",
+            "CreationDate": "2024-12-19T19:57:33+00:00"
+        },
+        {
+            "Name": "amplify-testimonials-dev-120154-deployment",
+            "CreationDate": "2023-08-26T11:02:18+00:00"
+        },
+        {
+            "Name": "amplify-testingstripewebhook-dev-93250-deployment",
+            "CreationDate": "2023-08-22T08:33:17+00:00"
+        },
+        {
+            "Name": "amplify-todo-dev-34646-deployment",
+            "CreationDate": "2023-04-25T02:46:59+00:00"
+        },
+        {
+            "Name": "amplify-todo-dev-35416-deployment",
+            "CreationDate": "2023-04-25T02:54:27+00:00"
+        },
+        {
+            "Name": "amplify-uikppd3-dev-96240-deployment",
+            "CreationDate": "2025-05-11T13:37:28+00:00"
+        },
+        {
+            "Name": "amplify-uivfh78-dev-02469-deployment",
+            "CreationDate": "2025-05-11T16:16:50+00:00"
+        },
+        {
+            "Name": "amplify-virtualtryon-dev-1cd9f-deployment",
+            "CreationDate": "2025-08-22T23:36:24+00:00"
+        },
+        {
+            "Name": "amplify-vuelogin-dev-102532-deployment",
+            "CreationDate": "2023-08-15T09:25:45+00:00"
+        },
+        {
+            "Name": "amplify-vuelogin-dev-104737-deployment",
+            "CreationDate": "2023-08-15T09:47:53+00:00"
+        },
+        {
+            "Name": "amplify-vuelogin-dev-112536-deployment",
+            "CreationDate": "2023-08-15T10:26:01+00:00"
+        },
+        {
+            "Name": "amplify-vuelogin-dev-71241-deployment",
+            "CreationDate": "2023-08-17T06:12:50+00:00"
+        },
+        {
+            "Name": "amplify-vuelogin-prod-73939-deployment",
+            "CreationDate": "2023-08-17T07:39:44+00:00"
+        },
+        {
+            "Name": "amplify-vuelogin-staging-63932-deployment",
+            "CreationDate": "2023-08-17T06:39:37+00:00"
+        },
+        {
+            "Name": "amplifylimitteste6e6ab8f1c1649fe868f15ce7ca25be160157-dev",
+            "CreationDate": "2024-02-05T17:29:02+00:00"
+        },
+        {
+            "Name": "amzn-bucket-1757580859",
+            "CreationDate": "2025-09-11T08:57:04+00:00"
+        },
+        {
+            "Name": "apilambdas3sfnstack-grocerylistbucketbea68934-kxh1j5xtckid",
+            "CreationDate": "2025-04-13T14:04:11+00:00"
+        },
+        {
+            "Name": "appsync-masterclass-back-serverlessdeploymentbuck-1lw6xkgsnpu72",
+            "CreationDate": "2022-04-07T05:31:21+00:00"
+        },
+        {
+            "Name": "appsync-masterclass-back-serverlessdeploymentbuck-1u1wxlm1tx3fh",
+            "CreationDate": "2022-04-11T06:32:41+00:00"
+        },
+        {
+            "Name": "appsync-masterclass-back-serverlessdeploymentbuck-1uxl9ysph3xbj",
+            "CreationDate": "2022-03-22T21:01:40+00:00"
+        },
+        {
+            "Name": "appsync-masterclass-back-serverlessdeploymentbuck-51d8j8q98txi",
+            "CreationDate": "2022-04-07T05:42:32+00:00"
+        },
+        {
+            "Name": "appsync-masterclass-back-serverlessdeploymentbuck-a4dbs02cytxv",
+            "CreationDate": "2022-04-07T05:59:22+00:00"
+        },
+        {
+            "Name": "appsync-masterclass-back-serverlessdeploymentbuck-jmtmusqvj8uu",
+            "CreationDate": "2022-03-22T21:11:59+00:00"
+        },
+        {
+            "Name": "appsync-masterclass-back-serverlessdeploymentbuck-td8clbdd4jv",
+            "CreationDate": "2022-04-11T06:40:18+00:00"
+        },
+        {
+            "Name": "appsync-masterclass-backend-dev-assetsbucket-hjx2byu1tm6c",
+            "CreationDate": "2022-03-28T22:16:55+00:00"
+        },
+        {
+            "Name": "appsync-masterclass-backend-dev-assetsbucket-p5mz0h70lk72",
+            "CreationDate": "2022-04-11T06:41:06+00:00"
+        },
+        {
+            "Name": "auth-service-dev-serverlessdeploymentbucket-7qisuyjjdowi",
+            "CreationDate": "2021-08-02T06:18:41+00:00"
+        },
+        {
+            "Name": "aws-node-http-api-project-serverlessdeploymentbuck-hnj4rivp74as",
+            "CreationDate": "2024-02-22T14:04:13+00:00"
+        },
+        {
+            "Name": "aws-node-http-api-project-serverlessdeploymentbuck-qebxv4lorfmy",
+            "CreationDate": "2024-02-23T18:04:59+00:00"
+        },
+        {
+            "Name": "aws-node-project-dev-serverlessdeploymentbucket-1g755cijbd0vw",
+            "CreationDate": "2023-05-23T14:17:42+00:00"
+        },
+        {
+            "Name": "aws-sam-cli-managed-default-samclisourcebucket-1wrytzl3ahpz1",
+            "CreationDate": "2023-07-03T16:29:00+00:00"
+        },
+        {
+            "Name": "aws-sam-cli-managed-default-samclisourcebucket-4dxvqv2upw1q",
+            "CreationDate": "2023-06-16T08:36:50+00:00"
+        },
+        {
+            "Name": "aws-sam-cli-managed-default-samclisourcebucket-ov6m7e17si2d",
+            "CreationDate": "2023-05-31T15:07:42+00:00"
+        },
+        {
+            "Name": "aws-sam-cli-managed-default-samclisourcebucket-w7fazjv91dr3",
+            "CreationDate": "2023-06-08T14:01:01+00:00"
+        },
+        {
+            "Name": "aws-sam-cli-managed-default-samclisourcebucket-zowfxjn12agd",
+            "CreationDate": "2023-05-29T11:46:05+00:00"
+        },
+        {
+            "Name": "aws-sam-cli-managed-dev-pi-artifactsloggingbucket-7ryx9ypallu2",
+            "CreationDate": "2023-01-09T19:42:33+00:00"
+        },
+        {
+            "Name": "aws-sam-cli-managed-dev-pip-artifactsloggingbucket-mrjnl0s8rz5u",
+            "CreationDate": "2024-02-03T13:57:48+00:00"
+        },
+        {
+            "Name": "aws-sam-cli-managed-dev-pipeline-artifactsbucket-1cguh8qv3823m",
+            "CreationDate": "2023-01-09T19:42:56+00:00"
+        },
+        {
+            "Name": "aws-sam-cli-managed-dev-pipeline-r-artifactsbucket-5gqz6uvhlxas",
+            "CreationDate": "2024-02-03T13:58:17+00:00"
+        },
+        {
+            "Name": "aws-sam-cli-managed-prod-p-artifactsloggingbucket-1a88crz69p523",
+            "CreationDate": "2023-09-17T17:45:52+00:00"
+        },
+        {
+            "Name": "aws-sam-cli-managed-prod-p-artifactsloggingbucket-e3cmgx8cak3d",
+            "CreationDate": "2023-01-09T19:45:50+00:00"
+        },
+        {
+            "Name": "aws-sam-cli-managed-prod-pipeline-artifactsbucket-1ciais5udtssd",
+            "CreationDate": "2023-01-09T19:46:14+00:00"
+        },
+        {
+            "Name": "aws-sam-cli-managed-prod-pipeline-artifactsbucket-1sxc8l0fkrr14",
+            "CreationDate": "2023-09-17T17:46:14+00:00"
+        },
+        {
+            "Name": "aws-serverless-shopping-cart-src-132260253285-us-east-2",
+            "CreationDate": "2021-04-05T19:33:27+00:00"
+        },
+        {
+            "Name": "aws-transcribe-job",
+            "CreationDate": "2024-12-05T21:05:20+00:00"
+        },
+        {
+            "Name": "babysitter7639e12de5594c24a51ef43329ee6a8672600-dev",
+            "CreationDate": "2022-01-02T06:37:19+00:00"
+        },
+        {
+            "Name": "babysittercfd13c6c264048dba0cad26bcf7692a0204440-dev",
+            "CreationDate": "2021-12-20T16:59:14+00:00"
+        },
+        {
+            "Name": "backendstack2-tacorecipes2amplifycodegenassetsamp-1esqdnzphtd80",
+            "CreationDate": "2023-10-27T10:32:03+00:00"
+        },
+        {
+            "Name": "backendstack2-tacorecipes2amplifycodegenassetsamp-7a8wtyodkq7v",
+            "CreationDate": "2023-10-27T10:27:25+00:00"
+        },
+        {
+            "Name": "backup-bucket-dd1d8368-4aae-9197-7e5a-1fe1632f145e",
+            "CreationDate": "2023-05-09T14:22:33+00:00"
+        },
+        {
+            "Name": "baselimeconnector-baselimes3bucket-rcpdqg6ai86s",
+            "CreationDate": "2024-03-27T06:25:42+00:00"
+        },
+        {
+            "Name": "bedrock-agentcore-codebuild-sources-132260253285-us-east-1",
+            "CreationDate": "2025-08-05T13:45:17+00:00"
+        },
+        {
+            "Name": "bucket-c888783b-20240823075020703200000001",
+            "CreationDate": "2024-08-23T07:50:23+00:00"
+        },
+        {
+            "Name": "bucket-c8b8ea08-2024080903592745930000000d",
+            "CreationDate": "2024-08-09T03:59:30+00:00"
+        },
+        {
+            "Name": "bucket-c8f7baa0-20240809035940397900000020",
+            "CreationDate": "2024-08-09T03:59:42+00:00"
+        },
+        {
+            "Name": "catalyst-rag-bucket",
+            "CreationDate": "2024-06-24T10:16:59+00:00"
+        },
+        {
+            "Name": "cdk-hnb659fds-assets-132260253285-us-east-1",
+            "CreationDate": "2025-08-25T15:46:14+00:00"
+        },
+        {
+            "Name": "cdk-hnb659fds-assets-132260253285-us-east-2",
+            "CreationDate": "2025-05-11T16:00:10+00:00"
+        },
+        {
+            "Name": "cdk-hnb659fds-assets-132260253285-us-west-1",
+            "CreationDate": "2024-06-05T11:27:29+00:00"
+        },
+        {
+            "Name": "cdk-hnb659fds-assets-132260253285-us-west-2",
+            "CreationDate": "2025-10-23T09:01:10+00:00"
+        },
+        {
+            "Name": "cdkimsprojectstack-pipelineartifactsbucketaea9a05-dk0gqu8hne8j",
+            "CreationDate": "2023-10-20T00:07:07+00:00"
+        },
+        {
+            "Name": "cdkimsprojectstack-pipelineartifactsbucketaea9a05-nydi3s0iok3c",
+            "CreationDate": "2023-09-17T03:25:15+00:00"
+        },
+        {
+            "Name": "cdkimsprojectstack-pipelineartifactsbucketaea9a052-tmtydjelplqs",
+            "CreationDate": "2023-11-26T12:03:33+00:00"
+        },
+        {
+            "Name": "cdkrekognitionprojectstac-videouploadbucketb3785c5-3irtyvwb3yfy",
+            "CreationDate": "2025-11-15T19:24:04+00:00"
+        },
+        {
+            "Name": "cdks3stack-uploadbucketd2c1da78-ebpbeod5qpgf",
+            "CreationDate": "2024-09-02T01:26:45+00:00"
+        },
+        {
+            "Name": "cdktoolkit-stagingbucket-v855nbtxqmiu",
+            "CreationDate": "2021-05-07T20:08:40+00:00"
+        },
+        {
+            "Name": "cdktoolkit-stagingbucket-we82esze263r",
+            "CreationDate": "2021-08-30T10:37:09+00:00"
+        },
+        {
+            "Name": "cdktrainerpipeline-pipelineartifactsbucketaea9a05-126gd5utxxdx7",
+            "CreationDate": "2021-05-17T17:51:16+00:00"
+        },
+        {
+            "Name": "cdktrainerpipeline-pipelineartifactsbucketaea9a05-1rut0seekvyj8",
+            "CreationDate": "2021-05-17T18:02:19+00:00"
+        },
+        {
+            "Name": "cf-templates-lhpirmu8526a-us-east-1",
+            "CreationDate": "2024-06-17T12:44:09+00:00"
+        },
+        {
+            "Name": "cf-templates-lhpirmu8526a-us-east-2",
+            "CreationDate": "2024-06-17T13:45:00+00:00"
+        },
+        {
+            "Name": "chatboard192212-chats",
+            "CreationDate": "2023-09-04T18:26:55+00:00"
+        },
+        {
+            "Name": "chatroom150741-dev",
+            "CreationDate": "2023-09-04T20:55:55+00:00"
+        },
+        {
+            "Name": "cicd-dev-serverlessdeploymentbucket-roy1deeazxv",
+            "CreationDate": "2021-05-29T21:15:14+00:00"
+        },
+        {
+            "Name": "code-c84a50b1-20230702144547612800000004",
+            "CreationDate": "2023-07-02T14:45:50+00:00"
+        },
+        {
+            "Name": "code-c84a50b1-20240212165524726900000002",
+            "CreationDate": "2024-02-12T16:55:33+00:00"
+        },
+        {
+            "Name": "code-c84a50b1-20240809035928282900000010",
+            "CreationDate": "2024-08-09T03:59:30+00:00"
+        },
+        {
+            "Name": "commerce4f57f623543047fc87b7ef20e805713093837-staging",
+            "CreationDate": "2023-11-01T11:23:26+00:00"
+        },
+        {
+            "Name": "cute-cats-bucket",
+            "CreationDate": "2025-07-21T09:41:08+00:00"
+        },
+        {
+            "Name": "demo-upload-lambda-vernyuy",
+            "CreationDate": "2023-05-22T08:26:30+00:00"
+        },
+        {
+            "Name": "dev-us-east-1-destination",
+            "CreationDate": "2024-02-04T08:13:14+00:00"
+        },
+        {
+            "Name": "dev-us-east-1-source",
+            "CreationDate": "2024-02-04T08:13:06+00:00"
+        },
+        {
+            "Name": "eca-content-flow",
+            "CreationDate": "2025-05-23T23:35:41+00:00"
+        },
+        {
+            "Name": "eca-youtube-videos",
+            "CreationDate": "2025-04-19T11:36:45+00:00"
+        },
+        {
+            "Name": "ecommerce-products-api",
+            "CreationDate": "2024-08-04T13:47:39+00:00"
+        },
+        {
+            "Name": "educloud-academy-courses",
+            "CreationDate": "2024-05-10T13:57:40+00:00"
+        },
+        {
+            "Name": "educloud-test-bucket-132260253285",
+            "CreationDate": "2023-07-06T10:13:21+00:00"
+        },
+        {
+            "Name": "educloud-videos-backup-dont-delete",
+            "CreationDate": "2024-07-14T13:27:14+00:00"
+        },
+        {
+            "Name": "faq-app-flow",
+            "CreationDate": "2025-05-23T23:05:34+00:00"
+        },
+        {
+            "Name": "friendsaad6a8c20b2140b8b3310e07403ac98271347-staging",
+            "CreationDate": "2021-09-25T08:39:07+00:00"
+        },
+        {
+            "Name": "friendse753bb2cc2d146d5b840b13196bfc44c114615-dev",
+            "CreationDate": "2021-09-25T10:52:08+00:00"
+        },
+        {
+            "Name": "good-doctors",
+            "CreationDate": "2025-08-08T20:11:50+00:00"
+        },
+        {
+            "Name": "graphql-pdf-chat-us-east-1-132260253285",
+            "CreationDate": "2024-12-23T20:48:13+00:00"
+        },
+        {
+            "Name": "groupchata56f028a557141d999f41bd376ca67a2212428-dev",
+            "CreationDate": "2023-11-29T20:52:47+00:00"
+        },
+        {
+            "Name": "groupchatfbd9857d8c7440a9a3f04112e1574e80201231-stage",
+            "CreationDate": "2022-12-16T19:17:45+00:00"
+        },
+        {
+            "Name": "healthaicdkstack-healthaibucket90daf29e-0utp5gfsoiuj",
+            "CreationDate": "2025-05-18T16:46:30+00:00"
+        },
+        {
+            "Name": "healthaicdkstack-healthaibucket90daf29e-9h3kfoaxdvr4",
+            "CreationDate": "2025-07-03T12:22:52+00:00"
+        },
+        {
+            "Name": "interiordesignsocial21e54d28ce14474d8243012beb24fbff-dev",
+            "CreationDate": "2024-10-26T22:09:58+00:00"
+        },
+        {
+            "Name": "introduction-to-cloud-computing",
+            "CreationDate": "2025-05-29T00:06:28+00:00"
+        },
+        {
+            "Name": "lambda1-dev-serverlessdeploymentbucket-y19zqiml9nnu",
+            "CreationDate": "2023-05-22T08:18:03+00:00"
+        },
+        {
+            "Name": "livecomments",
+            "CreationDate": "2024-11-01T06:47:37+00:00"
+        },
+        {
+            "Name": "masteringaicdkstack-ailearningbucketec5711a2-1w5rptlvykmo",
+            "CreationDate": "2025-04-14T16:03:57+00:00"
+        },
+        {
+            "Name": "masteringaicdkstack-ailearningbucketec5711a2-cs1dakv4xqsy",
+            "CreationDate": "2025-04-14T12:29:52+00:00"
+        },
+        {
+            "Name": "masteringaicdkstack-ailearningbucketec5711a2-fbd6bbpnktj9",
+            "CreationDate": "2025-04-14T14:18:37+00:00"
+        },
+        {
+            "Name": "masteringaicdkstack-ailearningbucketec5711a2-gtww4tiscu5f",
+            "CreationDate": "2025-04-14T15:42:16+00:00"
+        },
+        {
+            "Name": "masteringaicdkstack-ailearningbucketec5711a2-rupifrmiorao",
+            "CreationDate": "2025-03-31T06:22:33+00:00"
+        },
+        {
+            "Name": "masteringaicdkstack-ailearningbucketec5711a2-vpda2fe4gstb",
+            "CreationDate": "2025-03-28T09:32:07+00:00"
+        },
+        {
+            "Name": "masteringaicdkstack-faqbucket14f548e3-yo1np1180pqr",
+            "CreationDate": "2025-04-14T16:03:56+00:00"
+        },
+        {
+            "Name": "morelifea0855eb5d9cd4bc59454ad66e553dc2c62518-staging",
+            "CreationDate": "2021-06-02T06:36:24+00:00"
+        },
+        {
+            "Name": "multi-modal-rag-notes-api-apiintegrations",
+            "CreationDate": "2025-01-12T22:24:19+00:00"
+        },
+        {
+            "Name": "multimodalstrandsagentsta-multimodalragbucketb9266-dobzr7ljyvxo",
+            "CreationDate": "2025-07-07T11:32:35+00:00"
+        },
+        {
+            "Name": "my-storage-bucket-cdk",
+            "CreationDate": "2025-03-25T09:05:40+00:00"
+        },
+        {
+            "Name": "my-storage-folder",
+            "CreationDate": "2023-12-06T03:10:01+00:00"
+        },
+        {
+            "Name": "mycdkpipeline-pipelineartifactsbucketaea9a052-gac3y9fzhgxw",
+            "CreationDate": "2023-08-21T08:15:34+00:00"
+        },
+        {
+            "Name": "mycdkpipeline-pipelineartifactsbucketaea9a052-otehfukl1fjm",
+            "CreationDate": "2023-08-21T08:22:50+00:00"
+        },
+        {
+            "Name": "newspaperappb0b7ad80b9a6421f9dfd3b13a662ab6272029-staging",
+            "CreationDate": "2021-05-23T12:35:00+00:00"
+        },
+        {
+            "Name": "notesgenaistack-notesgenaiamplifycodegenassetsamp-ao47z18ob6z3",
+            "CreationDate": "2023-10-27T12:30:29+00:00"
+        },
+        {
+            "Name": "novamasterystack-novaimagegenerationbucketc4d2b612-2dywsswv2kgh",
+            "CreationDate": "2025-04-10T19:57:54+00:00"
+        },
+        {
+            "Name": "pichichi-dev-serverlessdeploymentbucket-t89cjieuzw1k",
+            "CreationDate": "2022-02-06T13:25:42+00:00"
+        },
+        {
+            "Name": "pipelinestack-pipelineartifactsbucketaea9a052-1dkxlo0tq1zew",
+            "CreationDate": "2021-05-16T15:54:21+00:00"
+        },
+        {
+            "Name": "qaquality-assurance-us-east-1-destination",
+            "CreationDate": "2024-02-04T08:24:45+00:00"
+        },
+        {
+            "Name": "qaquality-assurance-us-east-1-source",
+            "CreationDate": "2024-02-04T08:24:36+00:00"
+        },
+        {
+            "Name": "quick-whippet-20231117073348237900000001",
+            "CreationDate": "2023-11-17T07:33:50+00:00"
+        },
+        {
+            "Name": "reactdatastorebucket170512-dev",
+            "CreationDate": "2023-05-07T16:13:07+00:00"
+        },
+        {
+            "Name": "restcdktypescriptstack-pipelineartifactsbucketaea9-oknfd92jz38k",
+            "CreationDate": "2024-03-21T09:01:22+00:00"
+        },
+        {
+            "Name": "restteststack-weatherapipipelineartifactsbucket688-5lei7aasdx1x",
+            "CreationDate": "2024-03-26T17:41:05+00:00"
+        },
+        {
+            "Name": "restteststack-weatherapipipelineartifactsbucket688-bkqyezrxqcrl",
+            "CreationDate": "2024-03-24T18:25:35+00:00"
+        },
+        {
+            "Name": "restteststack-weatherapipipelineartifactsbucket688-jqgdeiwaetsl",
+            "CreationDate": "2024-03-26T17:29:05+00:00"
+        },
+        {
+            "Name": "restteststack-weatherapipipelineartifactsbucket688-n0bz45j7j67b",
+            "CreationDate": "2024-03-26T17:15:20+00:00"
+        },
+        {
+            "Name": "restweatherapiuseast2stack-myfirstbucketb8884501-t4vndspitpo2",
+            "CreationDate": "2023-12-16T17:51:40+00:00"
+        },
+        {
+            "Name": "rocreate7385181c1c1746dabec99acb0681686a8ba55-dev",
+            "CreationDate": "2025-04-07T20:07:29+00:00"
+        },
+        {
+            "Name": "rosius",
+            "CreationDate": "2020-11-23T12:40:39+00:00"
+        },
+        {
+            "Name": "s3-features-source-132260253285",
+            "CreationDate": "2025-11-27T13:46:55+00:00"
+        },
+        {
+            "Name": "s3bucketworkspace124050-dev",
+            "CreationDate": "2023-05-08T11:48:40+00:00"
+        },
+        {
+            "Name": "sagemaker-studio-132260253285-3w18nkaa3us",
+            "CreationDate": "2024-03-19T20:17:28+00:00"
+        },
+        {
+            "Name": "sagemaker-us-east-1-132260253285",
+            "CreationDate": "2024-03-19T20:17:31+00:00"
+        },
+        {
+            "Name": "sagemaker-us-east-2-132260253285",
+            "CreationDate": "2024-06-17T13:46:09+00:00"
+        },
+        {
+            "Name": "sales-csv-bucket",
+            "CreationDate": "2025-03-10T13:08:15+00:00"
+        },
+        {
+            "Name": "sam-rust-inventory-us-east-2-132260253285",
+            "CreationDate": "2023-12-28T13:46:22+00:00"
+        },
+        {
+            "Name": "saturnmobile1e4be24421424480a9b43b0dae95342138975-dev",
+            "CreationDate": "2025-06-09T12:18:43+00:00"
+        },
+        {
+            "Name": "saturnmobile5681dd56379840bbbba5fc2d22ee773c140725-dev",
+            "CreationDate": "2025-04-21T14:28:31+00:00"
+        },
+        {
+            "Name": "schedulepostsstack-knowledgebaseconstructaimultite-fcc8l4wugu59",
+            "CreationDate": "2025-04-19T12:54:25+00:00"
+        },
+        {
+            "Name": "schedulepostsstack-knowledgebaseconstructaimultite-or19ujmiwa9u",
+            "CreationDate": "2025-04-19T13:52:58+00:00"
+        },
+        {
+            "Name": "serverless-order-api-dev-serverlessdeploymentbuck-1c26zd89940f1",
+            "CreationDate": "2021-03-31T12:57:17+00:00"
+        },
+        {
+            "Name": "serverless-order-api-dev-serverlessdeploymentbuck-1i8jil8q7b559",
+            "CreationDate": "2021-03-31T11:19:08+00:00"
+        },
+        {
+            "Name": "serverless-pdf-chat-us-east-1-132260253285",
+            "CreationDate": "2023-10-27T09:58:34+00:00"
+        },
+        {
+            "Name": "serverless-pdf-chat-us-east-2-132260253285",
+            "CreationDate": "2023-10-25T10:54:15+00:00"
+        },
+        {
+            "Name": "serverless-rest-api-with-serverlessdeploymentbuck-1ff3o9qkig19t",
+            "CreationDate": "2021-03-10T13:15:49+00:00"
+        },
+        {
+            "Name": "serverless-rest-api-with-serverlessdeploymentbuck-1gzzpxhd0sfww",
+            "CreationDate": "2021-03-10T11:57:29+00:00"
+        },
+        {
+            "Name": "serverless-rest-api-with-serverlessdeploymentbuck-1jeewfjgkr4yu",
+            "CreationDate": "2021-03-09T21:38:16+00:00"
+        },
+        {
+            "Name": "serverless-rest-api-with-serverlessdeploymentbuck-bzzmkxcky6d8",
+            "CreationDate": "2021-03-10T19:16:29+00:00"
+        },
+        {
+            "Name": "serverless-rest-api-with-serverlessdeploymentbuck-iva5z8qe3vy",
+            "CreationDate": "2021-02-12T21:12:32+00:00"
+        },
+        {
+            "Name": "serverlessappsyncchat-de-serverlessdeploymentbuck-u0gwji0oflnc",
+            "CreationDate": "2021-05-28T08:07:21+00:00"
+        },
+        {
+            "Name": "serverlessrepo-realworld-serverless-ap-databucket-93rtvnm2hssd",
+            "CreationDate": "2021-03-18T07:23:39+00:00"
+        },
+        {
+            "Name": "serverlessrepo-realworld-serverless-websitebucket-1mldim37z4avd",
+            "CreationDate": "2021-03-18T07:23:31+00:00"
+        },
+        {
+            "Name": "sls-appsync-backend-dev-serverlessdeploymentbucke-13crq4ispvuqv",
+            "CreationDate": "2021-05-28T07:52:14+00:00"
+        },
+        {
+            "Name": "sls-appsync-backend-dev-serverlessdeploymentbucke-1aioou7h0vdgs",
+            "CreationDate": "2021-05-28T09:37:37+00:00"
+        },
+        {
+            "Name": "sls-appsync-backend-dev-serverlessdeploymentbucke-1mx3uxsp6zarb",
+            "CreationDate": "2021-05-28T09:05:56+00:00"
+        },
+        {
+            "Name": "sls-appsync-backend-dev-serverlessdeploymentbucke-1orqf61bljun6",
+            "CreationDate": "2021-05-28T18:30:49+00:00"
+        },
+        {
+            "Name": "sls-appsync-backend-dev-serverlessdeploymentbucke-43lkt4zrqrdx",
+            "CreationDate": "2021-05-28T07:58:16+00:00"
+        },
+        {
+            "Name": "sls-appsync-backend-dev-serverlessdeploymentbucke-6xinc9yhu6ox",
+            "CreationDate": "2021-05-28T07:45:25+00:00"
+        },
+        {
+            "Name": "sls-appsync-backend-dev-serverlessdeploymentbucke-73s5imwullr2",
+            "CreationDate": "2021-05-28T10:43:10+00:00"
+        },
+        {
+            "Name": "sls-appsync-backend-dev-serverlessdeploymentbucke-fqssumzxgfi9",
+            "CreationDate": "2021-05-28T07:34:44+00:00"
+        },
+        {
+            "Name": "sls-appsync-backend-dev-serverlessdeploymentbucke-k0rsdwmp5ppf",
+            "CreationDate": "2021-05-28T15:40:29+00:00"
+        },
+        {
+            "Name": "sls-appsync-backend-dev-serverlessdeploymentbucke-pbbtla4dnwa8",
+            "CreationDate": "2021-05-29T22:06:24+00:00"
+        },
+        {
+            "Name": "sls-appsync-backend-prod-serverlessdeploymentbuck-1abt2i6rbh8v",
+            "CreationDate": "2021-05-30T19:26:22+00:00"
+        },
+        {
+            "Name": "sls-appsync-backend-prod-serverlessdeploymentbuck-1d5mrgynzszro",
+            "CreationDate": "2021-05-30T19:54:28+00:00"
+        },
+        {
+            "Name": "sls-appsync-backend-prod-serverlessdeploymentbuck-1dwfpgj403p10",
+            "CreationDate": "2021-05-30T15:08:12+00:00"
+        },
+        {
+            "Name": "sls-appsync-backend-prod-serverlessdeploymentbuck-1k1gzr53dsv78",
+            "CreationDate": "2021-05-30T15:28:54+00:00"
+        },
+        {
+            "Name": "sls-appsync-backend-prod-serverlessdeploymentbuck-1ossmzk8hw6y",
+            "CreationDate": "2021-05-30T19:03:32+00:00"
+        },
+        {
+            "Name": "sls-appsync-backend-prod-serverlessdeploymentbuck-1x8dp7md8pxqu",
+            "CreationDate": "2021-05-30T20:21:35+00:00"
+        },
+        {
+            "Name": "sls-appsync-backend-prod-serverlessdeploymentbuck-8f5cni4t41qs",
+            "CreationDate": "2021-05-30T20:13:07+00:00"
+        },
+        {
+            "Name": "sls-appsync-backend-prod-serverlessdeploymentbuck-mvr50k8aj60i",
+            "CreationDate": "2021-05-30T20:07:53+00:00"
+        },
+        {
+            "Name": "sls-appsync-backend-prod-serverlessdeploymentbuck-tcf58k4apqme",
+            "CreationDate": "2021-05-30T14:53:24+00:00"
+        },
+        {
+            "Name": "sls-base-dev-serverlessdeploymentbucket-1p8bx5ppioagk",
+            "CreationDate": "2021-07-28T13:00:20+00:00"
+        },
+        {
+            "Name": "sociallyapp9adadea820394a86bd35f565dc5c7795203810-dev",
+            "CreationDate": "2021-05-02T22:22:19+00:00"
+        },
+        {
+            "Name": "socialmediaapp7aa7e179c22b447681dd8c2df2863fd730323-staging",
+            "CreationDate": "2021-06-01T21:35:12+00:00"
+        },
+        {
+            "Name": "socialmediaappd406722734bb403d9e8705fadccadd6330323-staging",
+            "CreationDate": "2021-06-01T21:44:10+00:00"
+        },
+        {
+            "Name": "socialmediaappdef6ddd183de475fb0a05a92701904df30323-staging",
+            "CreationDate": "2021-06-01T21:23:18+00:00"
+        },
+        {
+            "Name": "sstbootstrap-euwest1facae36a-z2eg8rupv7zg",
+            "CreationDate": "2023-06-22T08:59:58+00:00"
+        },
+        {
+            "Name": "tenanttemplatestack-ad7ba618-0edb-4ce8-95-mybucket-lq408xwwqxk1",
+            "CreationDate": "2025-11-20T13:23:51+00:00"
+        },
+        {
+            "Name": "test-app160157-dev",
+            "CreationDate": "2024-02-05T19:53:58+00:00"
+        },
+        {
+            "Name": "test-strands-agent",
+            "CreationDate": "2025-06-08T14:03:29+00:00"
+        },
+        {
+            "Name": "testimonialsea2f08954b4342be8c117209108868a4120154-dev",
+            "CreationDate": "2023-09-10T17:43:26+00:00"
+        },
+        {
+            "Name": "todo-storage-9ca75a1835416-dev",
+            "CreationDate": "2023-04-25T16:24:42+00:00"
+        },
+        {
+            "Name": "trainerpipelinestack-pipelineartifactsbucketaea9a-1etjw0scht0os",
+            "CreationDate": "2021-05-16T14:43:57+00:00"
+        },
+        {
+            "Name": "trainerpipelinestack-pipelineartifactsbucketaea9a-svgjtrdg6bt4",
+            "CreationDate": "2021-05-16T11:38:49+00:00"
+        },
+        {
+            "Name": "uploadimages8728d387b92842088f2c24be6dfb1e2a101348-dev",
+            "CreationDate": "2021-05-03T10:12:24+00:00"
+        },
+        {
+            "Name": "upstash-rest-api-dev-serverlessdeploymentbucket-hnoa2fwgp25f",
+            "CreationDate": "2021-09-27T06:30:37+00:00"
+        },
+        {
+            "Name": "virtualtryoncdkstack-virtualtryonuploadbucket61e9b-uxcd2cheyeye",
+            "CreationDate": "2025-08-26T18:24:18+00:00"
+        },
+        {
+            "Name": "vsh-hostingstack-1k1zrc0u8bt2h-bucket-bdp1pmznu0uk",
+            "CreationDate": "2024-12-09T13:04:57+00:00"
+        },
+        {
+            "Name": "vsh-storagestack-syx68dut5mjd-s3audio-fknppnj7syki",
+            "CreationDate": "2024-12-09T13:04:36+00:00"
+        },
+        {
+            "Name": "vsh-storagestack-syx68dut5mjd-s3logging-pez86wzhudny",
+            "CreationDate": "2024-12-09T13:04:22+00:00"
+        },
+        {
+            "Name": "vsh-storagestack-syx68dut5mjd-s3transcripts-x5upy2b1owgh",
+            "CreationDate": "2024-12-09T13:04:36+00:00"
+        },
+        {
+            "Name": "vsh-storagestack-syx68dut5mjd-s3videosinput-oaeadzfm3eph",
+            "CreationDate": "2024-12-09T13:04:36+00:00"
+        },
+        {
+            "Name": "vsh-storagestack-syx68dut5mjd-s3videosoutput-0qbvkw4pqatn",
+            "CreationDate": "2024-12-09T13:04:36+00:00"
+        },
+        {
+            "Name": "weatherapistack-pipelineartifactsbucketaea9a052-k3v4wblyafpy",
+            "CreationDate": "2024-03-24T16:56:15+00:00"
+        },
+        {
+            "Name": "weatherapistack-weatherapipipelineartifactsbucket6-ecey8odtmgre",
+            "CreationDate": "2024-03-24T17:38:16+00:00"
+        },
+        {
+            "Name": "weatherapistack-weatherapipipelineartifactsbucket6-eh0ypwqroxvu",
+            "CreationDate": "2024-03-24T17:01:42+00:00"
+        },
+        {
+            "Name": "weatherapistack-weatherapipipelineartifactsbucket6-ftvwbu1ydjbd",
+            "CreationDate": "2024-03-24T17:50:22+00:00"
+        },
+        {
+            "Name": "weatherapistack-weatherapipipelineartifactsbucket6-ig1an4qlb4kr",
+            "CreationDate": "2024-03-26T17:48:37+00:00"
+        },
+        {
+            "Name": "weatherapistack-weatherapipipelineartifactsbucket6-jlnmqa7duznz",
+            "CreationDate": "2024-03-24T17:40:13+00:00"
+        },
+        {
+            "Name": "weathergraphqlapistack-weathergraphqlapiamplifyco-154x36t5x8724",
+            "CreationDate": "2023-11-23T14:47:20+00:00"
+        }
+    ],
+    "Owner": {
+        "ID": "d49d0175c98fe3fc369ca42943adf107d46fb0b16079be4f650bb228b81c2fa2"
+    },
+    "Prefix": null
+}

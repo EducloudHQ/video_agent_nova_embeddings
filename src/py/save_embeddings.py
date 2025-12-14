@@ -19,11 +19,12 @@ logger.setLevel(logging.INFO)
 s3_client = boto3.client('s3')
 s3_vectors_client = boto3.client('s3vectors')
 
-def process_jsonl_file(key):
+def process_jsonl_file(key, s3_source_uri):
     """
     Streams a JSONL file from S3, parses vectors, and pushes to S3 Vector Index.
     """
     logger.info(f"Processing file: {key}")
+    logger.info(f"s3_source_uri: {s3_source_uri}")
     
     try:
         response = s3_client.get_object(Bucket=SOURCE_BUCKET_NAME, Key=key)
@@ -48,8 +49,17 @@ def process_jsonl_file(key):
                     'data': {"float32": record.get('embedding')}, 
                 }
                 
-                if 'metadata' in record:
-                    vector_entry['metadata'] = record.get('metadata')
+                # Extract metadata: check both 'metadata' (generic) and 'segmentMetadata' (Bedrock Segmented)
+                raw_metadata = record.get('metadata', {})
+                segment_metadata = record.get('segmentMetadata', {})
+                
+                # Merge them (segmentMetadata takes precedence or just combines)
+                combined_metadata = {**raw_metadata, **segment_metadata}
+                
+                vector_entry['metadata'] = combined_metadata
+
+                if s3_source_uri:
+                    vector_entry['metadata']['s3_uri'] = s3_source_uri
 
                 batch.append(vector_entry)
 
@@ -87,7 +97,11 @@ def flush_batch(batch):
 def lambda_handler(event, context):
     logger.info(f"Received Event: {json.dumps(event)}")
    
-    s3_uri = event.get('OutputDataConfig', {}).get('S3OutputDataConfig', {}).get('S3Uri', '')
+    s3_uri = event.get('S3Uri', '')
+    mediaFileUri = event.get('mediaFileUri', '')
+
+    logger.info(f"s3_uri: {s3_uri}")
+    logger.info(f"mediaFileUri: {mediaFileUri}")
     
     prefix = ''
     if s3_uri:
@@ -119,7 +133,9 @@ def lambda_handler(event, context):
                 key = obj['Key']
                 # Only process .jsonl output files
                 if key.endswith('.jsonl'):
-                    process_jsonl_file(key)
+                    # Pass the source S3 URI if available in the event
+                   
+                    process_jsonl_file(key, mediaFileUri)
                     file_count += 1
         
         result_msg = f"Processed {file_count} files successfully from prefix: {prefix}"

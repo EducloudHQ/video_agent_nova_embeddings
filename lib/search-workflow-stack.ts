@@ -56,7 +56,28 @@ export class SearchWorkflowStack extends cdk.Stack {
       }
     });
 
-    this.searchCutWorkflowFunctionArn = searchCutWorkflowFunction.functionArn;
+ 
+     // Create version and alias
+    const version = searchCutWorkflowFunction.currentVersion;
+    const alias = new lambda.Alias(this, 'ProdAlias', {
+      aliasName: 'prod',
+      version: version,
+    });
+
+       this.searchCutWorkflowFunctionArn = alias.functionArn;
+
+
+
+       // Add checkpoint permissions
+    searchCutWorkflowFunction.addToRolePolicy(new iam.PolicyStatement({
+      actions: [
+        'lambda:CheckpointDurableExecutions',
+        'lambda:GetDurableExecutionState',
+         'lambda:SendDurableExecutionCallbackSuccess',
+        'lambda:SendDurableExecutionCallbackFailure',
+      ],
+      resources: ["*"],
+    }));
 
     // Grant permissions
     

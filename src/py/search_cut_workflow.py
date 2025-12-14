@@ -21,7 +21,7 @@ from aws_durable_execution_sdk_python.retries import (
 )
 VECTOR_BUCKET_NAME = os.environ.get('VECTOR_BUCKET_NAME')
 VECTOR_INDEX_NAME = os.environ.get('VECTOR_INDEX_NAME', '')
-s3_vectors = boto3.client('s3vectors')
+s3_vectors = boto3.client('s3vectors',region_name='us-east-1')
 config = Config(read_timeout=3600)
 bedrock_runtime = boto3.client('bedrock-runtime', region_name='us-east-1', config=config)
 s3_client = boto3.client('s3', region_name='us-east-1')
@@ -93,22 +93,33 @@ def search_video_step(step_context: StepContext, query: str) -> dict:
         vectorBucketName=VECTOR_BUCKET_NAME,
         indexName=VECTOR_INDEX_NAME,
         queryVector={'float32': query_embedding},
-        topK=1, # We only want the best match for this workflow
+        topK=1,
         returnMetadata=True,
         returnDistance=True
     )
+
+    step_context.logger.info(f"Search response: {search_response}")
 
     if not search_response.get('vectors'):
         raise Exception("No matching video found.")
 
     # 3. Extract Info
     best_match = search_response['vectors'][0]
+    step_context.logger.info(f"best match: {best_match}")
     metadata = best_match['metadata']
+    step_context.logger.info(f"metadata: {metadata}")
     
+    # Support multiple metadata formats for timestamps
+    start_time = metadata.get('segmentStartSeconds') or metadata.get('startSeconds') or metadata.get('start_seconds')
+    end_time = metadata.get('segmentEndSeconds') or metadata.get('endSeconds') or metadata.get('end_seconds')
+
+    if start_time is None or end_time is None:
+         raise ValueError(f"Missing start/end time in metadata. Keys found: {metadata.keys()}")
+
     result = {
-        "s3_uri": metadata.get('s3_uri'), # e.g. s3://bucket/video.mp4
-        "start_time": metadata.get('segmentStartSeconds'),
-        "end_time": metadata.get('segmentEndSeconds'),
+        "s3_uri": metadata.get('s3_uri'), 
+        "start_time": start_time,
+        "end_time": end_time,
         "score": best_match.get('score')
     }
     step_context.logger.info(f"Found match: {result}")
@@ -124,6 +135,9 @@ def cut_video_step(step_context: StepContext, match_data: dict, request_id: str)
     step_context.logger.info(f"Cutting video: {match_data['s3_uri']}")
     
     s3_uri = match_data['s3_uri']
+    if not s3_uri:
+        raise ValueError(f"Missing 's3_uri' in vector metadata. Found keys: {match_data.keys()}")
+
     # Parse Bucket and Key from s3://bucket/key
     parts = s3_uri.replace("s3://", "").split("/", 1)
     bucket = parts[0]
