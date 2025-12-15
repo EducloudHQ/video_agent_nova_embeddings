@@ -1,6 +1,7 @@
 schema {
   mutation: Mutation
   query:Query
+  subscription:Subscription
 
 }
 
@@ -11,12 +12,10 @@ type Query {
 type Mutation {
   search(text: String!): Boolean! @aws_api_key
   approveVideo(
-    requestId: String!
     status: String!
     message: String
-    callbackId: String
-    videoUrl: String
-  ): VideoStatus @aws_api_key
+    callbackId: String!
+  ): Boolean! @aws_api_key
   
   
   updateVideoStatus(
@@ -29,9 +28,8 @@ type Mutation {
 }
 
 type Subscription {
-  onVideoStatusUpdate(requestId: String): VideoStatus
+  onVideoStatusUpdate: VideoStatus
     @aws_subscribe(mutations: ["updateVideoStatus"])
-    @aws_api_key
 }
 
 type VideoStatus @aws_iam @aws_api_key {

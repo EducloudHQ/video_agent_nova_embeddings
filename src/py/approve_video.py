@@ -11,13 +11,12 @@ def handler(event, context):
     # AppSync invokes the lambda with "arguments"
     # Mutation: approveOrder(input: ApproveOrderResponseInput!)
     # Input has: status, orderId, callbackId
-    input_data = event.get('arguments', {}).get('input', {})
+    input_data = event.get('arguments', {})
    
     status = input_data.get('status')
     callback_id = input_data.get('callbackId')
     message = input_data.get('message')
-    request_id = input_data.get('requestId')
-    video_url = input_data.get('videoUrl')
+   
     
     if not status or not callback_id:
         print("Missing status or callbackId")
@@ -27,10 +26,9 @@ def handler(event, context):
         if status == "APPROVED":
             payload = json.dumps({
                 "status": "APPROVED",
-                "request_id": request_id,
                 "message": message,
                 "callback_id": callback_id,
-                "video_url": video_url
+            
             })
             print(f"Sending success callback for {callback_id}")
             lambda_client.send_durable_execution_callback_success(

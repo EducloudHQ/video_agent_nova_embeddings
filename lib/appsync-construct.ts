@@ -273,18 +273,19 @@ export class AppSyncConstruct extends Construct {
         index: "approve_video.py",
         runtime: cdk.aws_lambda.Runtime.PYTHON_3_13,
         memorySize: 1024,
-        durableConfig: {
-          executionTimeout: cdk.Duration.days(365),
-         retentionPeriod: cdk.Duration.days(7),
-        },
-        timeout: cdk.Duration.minutes(10),
         logGroup: approveVideoFunctionLogs,
         tracing: cdk.aws_lambda.Tracing.ACTIVE,
        
       
       }
     );
-
+     approveVideoFunction.addToRolePolicy(new iam.PolicyStatement({
+          actions: [
+             'lambda:SendDurableExecutionCallbackSuccess',
+            'lambda:SendDurableExecutionCallbackFailure',
+          ],
+          resources: ["*"],
+        }));
   
      // Configure the S3 bucket to trigger the Lambda function when files are uploaded to the videos/ path
     this.mediaBucket.addEventNotification(
