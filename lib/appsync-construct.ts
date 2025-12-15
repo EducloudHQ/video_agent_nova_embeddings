@@ -423,8 +423,8 @@ export class AppSyncConstruct extends Construct {
       })
     );
 
-     const logsGroup = new logs.LogGroup(this, "EventsLogGroup", {
-      logGroupName: "/aws/events/RealtimeAgentsEventBus/logs",
+     const logsGroup = new logs.LogGroup(this, "VideoAgentEventBusLogGroup", {
+      logGroupName: "/aws/events/VideoAgentEventBus/logs",
       retention: logs.RetentionDays.ONE_WEEK,
       removalPolicy: cdk.RemovalPolicy.DESTROY,
     });
