@@ -1,17 +1,89 @@
-.venv
+# IDE and Editor
 .idea
 .vscode
 .DS_Store
-!jest.config.js
+
+# Dependencies
+node_modules/
+.venv/
+venv/
+env/
+aws-exports.ts
+# Build outputs
 *.d.ts
-node_modules
-# YAML files
-*.yaml
+!jest.config.js
+dist/
+build/
+
+# CDK
+.cdk.staging/
+cdk.out/
+cdk.out.*/
+cdk.context.json
 
 # Python bytecode caches
 __pycache__/
 **/__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
 
-# CDK asset staging directory
-.cdk.staging
-cdk.out
+# Environment variables and secrets
+.env
+.env.local
+.env.*.local
+.env.development
+.env.production
+.env.test
+*.env
+
+# AWS credentials and config
+.aws/
+aws-exports.js
+amplifyconfiguration.json
+amplifyconfiguration.dart
+
+# Secrets and sensitive data
+secrets.json
+*.pem
+*.key
+*.cert
+*.crt
+*.p12
+*.pfx
+config.json
+local.json
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+lerna-debug.log*
+
+# Test coverage
+coverage/
+.nyc_output/
+*.lcov
+
+# Temporary files
+*.tmp
+*.temp
+*.swp
+*.swo
+*~
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# YAML files (if containing sensitive configs)
+# Uncomment if needed:
+# *.yaml
+# *.yml
+
+# Sample/test data that might contain sensitive info
+# buckets.json
+# sample.json

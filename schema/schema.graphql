@@ -6,33 +6,40 @@ schema {
 }
 
 type Query {
-  testQuery: String
+  testQuery: String @aws_api_key @aws_cognito_user_pools
 }
 
 type Mutation {
-  search(text: String!): Boolean! @aws_api_key
+  search(text: String!): Boolean! @aws_api_key @aws_cognito_user_pools
   approveVideo(
     status: String!
     message: String
     callbackId: String!
-  ): Boolean! @aws_api_key
+  ): Boolean! @aws_api_key @aws_cognito_user_pools
   
-  
+  getUploadUrl(fileName: String!, contentType: String!): UploadUrl! @aws_cognito_user_pools
+
   updateVideoStatus(
     requestId: String!
     status: String!
     message: String
     callbackId: String
     videoUrl: String
-  ): VideoStatus @aws_iam @aws_api_key
+  ): VideoStatus @aws_iam @aws_api_key @aws_cognito_user_pools
+}
+
+type UploadUrl @aws_cognito_user_pools {
+  url: String!
+  fileName: String!
 }
 
 type Subscription {
   onVideoStatusUpdate: VideoStatus
     @aws_subscribe(mutations: ["updateVideoStatus"])
+    @aws_api_key @aws_cognito_user_pools
 }
 
-type VideoStatus @aws_iam @aws_api_key {
+type VideoStatus @aws_iam @aws_api_key @aws_cognito_user_pools {
   requestId: String!
   status: String!
   message: String

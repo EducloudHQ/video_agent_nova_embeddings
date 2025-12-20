@@ -1,0 +1,145 @@
+@import "tailwindcss";
+@config "../tailwind.config.js";
+
+@layer base {
+  :root {
+    --background: 0 0% 100%;
+    --foreground: 222.2 84% 4.9%;
+
+    --card: 0 0% 100%;
+    --card-foreground: 222.2 84% 4.9%;
+
+    --popover: 0 0% 100%;
+    --popover-foreground: 222.2 84% 4.9%;
+
+    --primary: 262.1 83.3% 57.8%; /* Untitled UI Purple #7F56D9 */
+    --primary-foreground: 210 40% 98%;
+
+    --secondary: 210 40% 96.1%;
+    --secondary-foreground: 222.2 47.4% 11.2%;
+
+    --muted: 210 40% 96.1%;
+    --muted-foreground: 215.4 16.3% 46.9%;
+
+    --accent: 210 40% 96.1%;
+    --accent-foreground: 222.2 47.4% 11.2%;
+
+    --destructive: 0 84.2% 60.2%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 214.3 31.8% 91.4%;
+    --input: 214.3 31.8% 91.4%;
+    --ring: 262.1 83.3% 57.8%;
+
+    --radius: 0.75rem;
+  }
+
+  .dark {
+    --background: 222.2 84% 4.9%;
+    --foreground: 210 40% 98%;
+
+    --card: 222.2 84% 4.9%;
+    --card-foreground: 210 40% 98%;
+
+    --popover: 222.2 84% 4.9%;
+    --popover-foreground: 210 40% 98%;
+
+    --primary: 262.1 83.3% 57.8%;
+    --primary-foreground: 222.2 47.4% 11.2%;
+
+    --secondary: 217.2 32.6% 17.5%;
+    --secondary-foreground: 210 40% 98%;
+
+    --muted: 217.2 32.6% 17.5%;
+    --muted-foreground: 215 20.2% 65.1%;
+
+    --accent: 217.2 32.6% 17.5%;
+    --accent-foreground: 210 40% 98%;
+
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 210 40% 98%;
+
+    --border: 217.2 32.6% 17.5%;
+    --input: 217.2 32.6% 17.5%;
+    --ring: 262.1 83.3% 57.8%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+  body {
+    @apply bg-background text-foreground antialiased font-sans;
+  }
+}
+
+@layer utilities {
+  .glass-effect {
+    @apply bg-white/70 backdrop-blur-lg border border-white/20 shadow-xl;
+  }
+  .premium-card {
+    @apply bg-white rounded-3xl border border-gray-100 shadow-[0_8px_30px_rgb(0,0,0,0.04)] hover:shadow-[0_8px_30px_rgb(0,0,0,0.08)] transition-all duration-300;
+  }
+  .text-indigo-gradient {
+    @apply bg-gradient-to-r from-indigo-600 to-purple-600 bg-clip-text text-transparent;
+  }
+  .btn-primary {
+    @apply bg-[#7F56D9] text-white px-6 py-2.5 rounded-lg font-semibold hover:bg-[#6941C6] transition-all shadow-sm active:scale-95;
+  }
+  .input-field {
+    @apply w-full px-4 py-2.5 rounded-lg border border-gray-300 focus:ring-2 focus:ring-[#7F56D9]/20 focus:border-[#7F56D9] outline-none transition-all;
+  }
+}
+
+/* Floating animation for login illustration */
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.animate-float {
+  animation: float 6s ease-in-out infinite;
+}
+
+/* Amplify Authenticator Custom Styling */
+[data-amplify-authenticator] {
+  --amplify-colors-background-primary: transparent;
+  --amplify-colors-brand-primary-80: #4F46E5;
+  --amplify-colors-brand-primary-90: #4338CA;
+  --amplify-colors-brand-primary-100: #3730A3;
+  --amplify-colors-border-primary: #EEF2F6;
+  --amplify-colors-font-primary: #1E293B;
+  --amplify-components-tabs-item-active-border-color: #4F46E5;
+  --amplify-components-tabs-item-active-color: #4F46E5;
+  --amplify-components-button-primary-background-color: #4F46E5;
+  --amplify-components-button-primary-hover-background-color: #4338CA;
+  --amplify-components-field-label-color: #64748B;
+  width: 100%;
+}
+
+.amplify-authenticator__container {
+  box-shadow: none;
+  background: transparent;
+  border: none;
+}
+
+.amplify-button[data-variation='primary'] {
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  font-weight: 600;
+  box-shadow: 0 4px 6px -1px rgba(79, 70, 229, 0.1), 0 2px 4px -1px rgba(79, 70, 229, 0.06);
+}
+
+.amplify-input {
+  border-radius: 0.75rem;
+  padding: 0.75rem 1rem;
+  background: #F8FAFC;
+  border-color: #E2E8F0;
+}
+
+.amplify-input:focus {
+  background: white;
+  border-color: #4F46E5;
+  box-shadow: 0 0 0 4px rgba(79, 70, 229, 0.1);
+}
