@@ -27,7 +27,7 @@ interface AppSyncConstructProps {}
 export class AppSyncConstruct extends Construct {
   public readonly api: appsync.GraphqlApi;
   public readonly invokeWorkflowFunction: NodejsFunction;
-  public readonly saveEmbeddingsFunction: NodejsFunction;
+  public readonly saveEmbeddingsFunction: PythonFunction;
   public readonly mediaBucket: s3.Bucket;
   public readonly generateEmbeddingsStateMachine: sfn.StateMachine;
   public readonly vectorBucketName: string;
@@ -162,24 +162,23 @@ export class AppSyncConstruct extends Construct {
       assumedBy: new iam.ServicePrincipal("states.amazonaws.com"),
       description: "IAM Role assumed by the Step Functions state machine",
       managedPolicies: [
-        iam.ManagedPolicy.fromAwsManagedPolicyName("service-role/AWSLambdaRole"),
+        iam.ManagedPolicy.fromManagedPolicyArn(this, "LambdaRolePolicy", `arn:${cdk.Stack.of(this).partition}:iam::aws:policy/service-role/AWSLambdaRole`),
       ],
     });
 
     this.generateEmbeddingsStateMachine = new sfn.StateMachine(this, "GenerateEmbeddingsStateMachine", {
-      stateMachineName: "GenerateEmbeddingsStateMachine",
-      role: stateMachineRole,
       definitionBody: sfn.DefinitionBody.fromFile(
         path.join(__dirname, "../workflow/generate_embeddings.asl.json")
       ),
       definitionSubstitutions: {
         FUNCTION_ARN: this.saveEmbeddingsFunction.functionArn,
       },
+      role: stateMachineRole,
       tracingEnabled: true,
       logs: {
         destination: new cdk.aws_logs.LogGroup(this, "WithContextLogGroup", {
-          logGroupName: "/aws/stepfunctions/GenerateEmbeddingsStateMachine",
-          retention: cdk.aws_logs.RetentionDays.ONE_WEEK,
+          logGroupName: "/aws/vendedlogs/states/GenerateEmbeddingsStateMachine",
+          retention: logs.RetentionDays.ONE_WEEK,
           removalPolicy: cdk.RemovalPolicy.DESTROY,
         }),
         level: sfn.LogLevel.ALL,
@@ -196,7 +195,7 @@ export class AppSyncConstruct extends Construct {
     );
     stateMachineRole.addToPolicy(
       new iam.PolicyStatement({
-        actions: ["bedrock:InvokeModel", "bedrock:startAsyncInvoke", "bedrock:getAsyncInvoke"],
+        actions: ["bedrock:InvokeModel", "bedrock:StartAsyncInvoke", "bedrock:GetAsyncInvoke"],
         resources: ["*"],
         effect: iam.Effect.ALLOW,
       })
@@ -324,6 +323,7 @@ export class AppSyncConstruct extends Construct {
           callbackId: events.EventField.fromPath("$.detail.callbackId"),
           videoUrl: events.EventField.fromPath("$.detail.videoUrl"),
         }),
+        eventRole: appSyncEventBridgeRole,
       })
     );
 
@@ -352,17 +352,15 @@ export class AppSyncConstruct extends Construct {
       memorySize: 1024,
       timeout: cdk.Duration.seconds(30),
       environment: {
-        SEARCH_CUT_WORKFLOW_FUNCTION_ARN: `arn:aws:lambda:us-east-2:${cdk.Stack.of(this).account}:function:SearchCutWorkflowFunction:prod`,
-        TARGET_REGION: "us-east-2",
+        SEARCH_CUT_WORKFLOW_FUNCTION_ARN: `arn:aws:lambda:us-east-1:${cdk.Stack.of(this).account}:function:SearchCutWorkflowFunction:prod`,
+        TARGET_REGION: "us-east-1",
       },
     });
 
     invokeSearchCutWorkflowFunction.addToRolePolicy(
       new iam.PolicyStatement({
         actions: ["lambda:InvokeFunction"],
-        resources: [
-          `arn:aws:lambda:us-east-2:${cdk.Stack.of(this).account}:function:SearchCutWorkflowFunction:prod`,
-        ],
+        resources: ["*"],
         effect: iam.Effect.ALLOW,
       })
     );

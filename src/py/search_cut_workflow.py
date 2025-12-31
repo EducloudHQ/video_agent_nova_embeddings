@@ -234,9 +234,20 @@ def lambda_handler(event: dict, context: DurableContext) -> dict:
         # Pause execution here until external API calls SendTaskSuccess
         approval_result = callback.result() 
         
+        # Defensive parsing
+        if isinstance(approval_result, str):
+            try:
+                approval_result = json.loads(approval_result)
+            except Exception:
+                context.logger.warning(f"Failed to parse approval_result as JSON: {approval_result}")
+                # Fallback: if it's just a string, check if it's 'approve'
+                approval_result = {"action": "approve"} if approval_result.lower() == "approve" else {"action": "reject"}
+
         # --- PHASE 4: FINALIZATION ---
         # The approval_result comes from the external system (e.g., {"action": "approve"})
-        if approval_result.get('action') == 'approve':
+        action = approval_result.get('action') if isinstance(approval_result, dict) else None
+
+        if action == 'approve':
             send_event(request_id, "COMPLETED", message="Video approved and finalized.")
             return {
                 "status": "COMPLETED",

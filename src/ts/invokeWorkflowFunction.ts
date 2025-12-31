@@ -18,9 +18,7 @@ export const handler = async (event: any, _context: any) => {
   const client = new SFNClient({});
 
   for (const record of event.Records) {
-    // the mediaBucketUri and mediaBucket should be similar to these
-     // "mediaBucket": "s3://s3-features-source-132260253285",
-  //"mediaFileUri": "s3://s3-features-source-132260253285/NetflixMeridian.mp4"
+   
     
     const key = decodeURIComponent(record.s3.object.key.replace(/\+/g, " "));
     const mediaFileUri = `s3://${bucketName}/${record.s3.object.key}`;

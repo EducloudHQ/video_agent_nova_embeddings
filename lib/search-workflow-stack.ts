@@ -21,7 +21,7 @@ export class SearchWorkflowStack extends cdk.Stack {
     const ffmpegLayer = lambda.LayerVersion.fromLayerVersionArn(
       this,
       "FfmpegLayer",
-      "arn:aws:lambda:us-east-2:132260253285:layer:ffmpeg:1"
+      "arn:aws:lambda:us-east-1:132260253285:layer:ffmpeg-executable-file:1"
     );
 
     const searchFunctionLogs = new logs.LogGroup(

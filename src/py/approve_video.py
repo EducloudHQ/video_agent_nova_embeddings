@@ -22,6 +22,7 @@ def handler(event, context):
 
         if status == "APPROVED":
             payload = json.dumps({
+                "action": "approve",
                 "status": "APPROVED",
                 "message": message,
                 "callback_id": callback_id,

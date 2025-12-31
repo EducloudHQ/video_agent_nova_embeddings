@@ -21,7 +21,7 @@ def handler(event, context):
 
     try:
         # Construct the payload for the durable function
-        # The durable function expects "order_id" (based on our reading of it)
+      
         payload = json.dumps({"query": input_data})
         
         # Invoke the durable order function
