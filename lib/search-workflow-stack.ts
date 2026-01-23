@@ -47,7 +47,11 @@ export class SearchWorkflowStack extends cdk.Stack {
       
       logGroup: searchFunctionLogs,
       tracing: cdk.aws_lambda.Tracing.ACTIVE,
-      layers: [ffmpegLayer],
+      layers: [
+        // TODO: (Exercise 8) Attach the FFmpeg Layer to the function
+        // Hint: Use the ffmpegLayer variable defined above
+        // ffmpegLayer
+      ],
       environment: {
         // TODO: (Exercise 1) Define environment variables needed for the search function
         // Hint: You need VECTOR_BUCKET_NAME, VECTOR_INDEX_NAME, EVENT_BUS_NAME, and SOURCE_BUCKET_NAME from props
@@ -127,6 +131,9 @@ export class SearchWorkflowStack extends cdk.Stack {
       );
 
 
+      /*
+      // TODO: (Exercise 16) Grant the function permission to put events onto the VideoAgentEventBus
+      // Hint: Allow 'events:PutEvents' on the EventBridge bus ARN from props
       searchCutWorkflowFunction.addToRolePolicy(
           new iam.PolicyStatement({
               actions: ["events:PutEvents"],
@@ -134,5 +141,6 @@ export class SearchWorkflowStack extends cdk.Stack {
               effect: iam.Effect.ALLOW
           })
       );
+      */
   }
 }

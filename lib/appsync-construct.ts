@@ -203,6 +203,9 @@ export class AppSyncConstruct extends Construct {
       })
     );
 
+    /*
+    // TODO: (Exercise 13) Configure S3 bucket notification to trigger invokeWorkflowFunction
+    // Hint: Use mediaBucket.addEventNotification with s3.EventType.OBJECT_CREATED and set prefix to 'videos/'
     this.mediaBucket.addEventNotification(
       s3.EventType.OBJECT_CREATED,
       new s3n.LambdaDestination(this.invokeWorkflowFunction),
@@ -210,6 +213,7 @@ export class AppSyncConstruct extends Construct {
         prefix: "videos/",
       }
     );
+    */
 
     this.mediaBucket.grantReadWrite(this.invokeWorkflowFunction);
     this.invokeWorkflowFunction.addToRolePolicy(
@@ -252,6 +256,9 @@ export class AppSyncConstruct extends Construct {
       })
     );
 
+    /*
+    // TODO: (Exercise 15) Create an EventBridge rule to route status updates to AppSync
+    // Hint: Create a statusRule on videoAgentEventBus matching source 'video.pipeline' and detailType 'video.processing.status'
     const statusRule = new events.Rule(this, "VideoStatusRule", {
       eventBus: videoAgentEventBus,
       eventPattern: {
@@ -288,17 +295,16 @@ export class AppSyncConstruct extends Construct {
         variables: events.RuleTargetInput.fromObject({
           // TODO: (Exercise 10) Map EventBridge detail fields to GraphQL mutation variables
           // Hint: Map 'requestId', 'status', 'message', 'callbackId', and 'videoUrl' from the event detail
-          /*
           requestId: events.EventField.fromPath("$.detail.requestId"),
           status: events.EventField.fromPath("$.detail.status"),
           message: events.EventField.fromPath("$.detail.message"),
           callbackId: events.EventField.fromPath("$.detail.callbackId"),
           videoUrl: events.EventField.fromPath("$.detail.videoUrl"),
-          */
         }),
         eventRole: appSyncEventBridgeRole,
       })
     );
+    */
 
     const logsGroup = new logs.LogGroup(this, "VideoAgentEventBusLogGroup", {
       logGroupName: "/aws/events/VideoAgentEventBus/logs",
@@ -362,6 +368,9 @@ export class AppSyncConstruct extends Construct {
       code: appsync.Code.fromAsset("./resolvers/updateVideoStatus.js"),
     });
 
+    /*
+    // TODO: (Exercise 14) Connect the approveVideo Lambda as an AppSync Data Source and Resolver
+    // Hint: Use api.addLambdaDataSource and createResolver for the Mutation field 'approveVideo'
     this.api
       .addLambdaDataSource("approveVideoDataSource", approveVideoFunction)
       .createResolver("approveVideoFunctionResolver", {
@@ -370,6 +379,7 @@ export class AppSyncConstruct extends Construct {
         code: appsync.Code.fromAsset(path.join(__dirname, "../resolvers/invoke/invoke.js")),
         runtime: appsync.FunctionRuntime.JS_1_0_0,
       });
+    */
 
     this.api
       .addLambdaDataSource("invokeSearchCutWorkflowFunction", invokeSearchCutWorkflowFunction)

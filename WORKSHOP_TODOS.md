@@ -1,6 +1,6 @@
 # Workshop: Video AI Agent Backend Exercises
 
-This document lists the 8 key tasks you need to complete to get the Video AI Agent backend fully functional. Each task corresponds to a `TODO:` comment in the codebase.
+This document lists the 16 key tasks you need to complete to get the Video AI Agent backend fully functional. Each task corresponds to a `TODO:` comment in the codebase.
 
 ## CDK Infrastructure Exercises
 
@@ -24,6 +24,26 @@ This document lists the 8 key tasks you need to complete to get the Video AI Age
 - **Task:** Initialize the AppSync GraphQL API.
 - **Instruction:** Use `appsync.GraphqlApi` with `API_KEY` as the default authorization mode and `USER_POOL` (Cognito) as an additional authorization mode.
 
+### Exercise 13: S3 Bucket Notification
+- **File:** `lib/appsync-construct.ts`
+- **Task:** Configure S3 to trigger the ingestion workflow.
+- **Instruction:** Add an event notification to `mediaBucket` that triggers `invokeWorkflowFunction` whenever an object is created with the `videos/` prefix.
+
+### Exercise 14: AppSync Lambda DataSource & Resolver
+- **File:** `lib/appsync-construct.ts`
+- **Task:** Expose the `approveVideo` functionality via GraphQL.
+- **Instruction:** Add a Lambda data source for `approveVideoFunction` and create a resolver for the `approveVideo` mutation.
+
+### Exercise 15: EventBridge Rule for Pipeline Status
+- **File:** `lib/appsync-construct.ts`
+- **Task:** Create an EventBridge rule to route backend events to AppSync.
+- **Instruction:** Define a rule on the `VideoAgentEventBus` that filters for `video.pipeline` status events and targets the AppSync API with the provided mutation.
+
+### Exercise 16: Lambda EventBridge Permissions
+- **File:** `lib/search-workflow-stack.ts`
+- **Task:** Grant the search function permission to notify the system.
+- **Instruction:** Add an IAM policy statement allowing `events:PutEvents` on the `VideoAgentEventBus` ARN so the search workflow can report its progress.
+
 ## Lambda Logic Exercises
 
 ### Exercise 5: Generate Embeddings with Bedrock
@@ -40,6 +60,11 @@ This document lists the 8 key tasks you need to complete to get the Video AI Age
 - **File:** `src/py/search_cut_workflow.py`
 - **Task:** Construct and execute the FFmpeg command to cut the video clip.
 - **Instruction:** Use `-ss` for the start time, `-i` for the input file, `-to` for the end time, and `-c copy` for a fast, lossless cut.
+
+### Exercise 8: Lambda Layers (FFmpeg)
+- **File:** `lib/search-workflow-stack.ts`
+- **Task:** Attach the FFmpeg layer to the search function.
+- **Instruction:** Durable Execution functions often need external tools. Add the `ffmpegLayer` to the `layers` array in the `searchCutWorkflowFunction` definition.
 
 ---
 
