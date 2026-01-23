@@ -49,24 +49,13 @@ export class AppSyncConstruct extends Construct {
 
     this.mediaBucket = new s3.Bucket(this, "VideoMediaBucket", {
       bucketName: `${cdk.Stack.of(this).account}-${cdk.Stack.of(this).region}-video-media-bucket`,
-      removalPolicy: cdk.RemovalPolicy.RETAIN,
+      removalPolicy: cdk.RemovalPolicy.DESTROY,
       blockPublicAccess: s3.BlockPublicAccess.BLOCK_ALL,
       encryption: s3.BucketEncryption.S3_MANAGED,
       versioned: true,
       cors: [
-        {
-          allowedMethods: [
-            s3.HttpMethods.GET,
-            s3.HttpMethods.PUT,
-            s3.HttpMethods.POST,
-            s3.HttpMethods.DELETE,
-            s3.HttpMethods.HEAD,
-          ],
-          allowedOrigins: ["*"], // For development, allow all origins. Consider restricting this for production.
-          allowedHeaders: ["*"],
-          exposedHeaders: ["ETag"],
-          maxAge: 3000,
-        },
+        // TODO: (Exercise 3) Configure CORS for the media bucket
+        // Hint: Allow GET, PUT, POST, DELETE from all origins for development
       ],
       lifecycleRules: [
         {
@@ -102,33 +91,13 @@ export class AppSyncConstruct extends Construct {
 
     const cognitoResources = new CognitoConstruct(this, "CognitoResources");
 
+    // TODO: (Exercise 4) Initialize the AppSync GraphQL API
+    // Hint: Use appsync.GraphqlApi with API_KEY as default auth and COGNITO as additional auth
+    /*
     this.api = new appsync.GraphqlApi(this, "video-agent-api", {
-      name: "VideoAgentAPI",
-      definition: appsync.Definition.fromFile("schema/schema.graphql"),
-      authorizationConfig: {
-        defaultAuthorization: {
-          authorizationType: appsync.AuthorizationType.API_KEY,
-          apiKeyConfig: {
-            name: "default",
-            description: "Default API key for Ai Writer API",
-            expires: cdk.Expiration.atDate(keyExpirationDate),
-          },
-        },
-        additionalAuthorizationModes: [
-          { authorizationType: appsync.AuthorizationType.IAM },
-          {
-            authorizationType: appsync.AuthorizationType.USER_POOL,
-            userPoolConfig: {
-              userPool: cognitoResources.userPool,
-            },
-          },
-        ],
-      },
-      xrayEnabled: true,
-      logConfig: {
-        fieldLogLevel: appsync.FieldLogLevel.ALL,
-      },
+      // ...
     });
+    */
 
     const noneDs = this.api.addNoneDataSource("None");
 

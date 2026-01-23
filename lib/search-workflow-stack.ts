@@ -49,10 +49,8 @@ export class SearchWorkflowStack extends cdk.Stack {
       tracing: cdk.aws_lambda.Tracing.ACTIVE,
       layers: [ffmpegLayer],
       environment: {
-        VECTOR_BUCKET_NAME: props.vectorBucketName,
-        VECTOR_INDEX_NAME: props.vectorIndexName,
-        EVENT_BUS_NAME: props.eventBusName,
-        SOURCE_BUCKET_NAME: props.mediaBucketName,
+        // TODO: (Exercise 1) Define environment variables needed for the search function
+        // Hint: You need VECTOR_BUCKET_NAME, VECTOR_INDEX_NAME, EVENT_BUS_NAME, and SOURCE_BUCKET_NAME from props
       }
     });
 
@@ -94,13 +92,15 @@ export class SearchWorkflowStack extends cdk.Stack {
       );
   
       // Bedrock Access
+      // TODO: (Exercise 2) Add IAM permissions for Bedrock model invocation
+      // Hint: Allow 'bedrock:InvokeModel' on the specific Nova multimodal embeddings model ARN
+      /*
       searchCutWorkflowFunction.addToRolePolicy(
         new iam.PolicyStatement({
-          actions: ["bedrock:InvokeModel"],
-          resources: ["arn:aws:bedrock:us-east-1::foundation-model/amazon.nova-2-multimodal-embeddings-v1:0"],
-          effect: iam.Effect.ALLOW,
+          // ...
         })
       );
+      */
   
       // S3 Vectors & KMS
       searchCutWorkflowFunction.addToRolePolicy(
@@ -122,7 +122,7 @@ export class SearchWorkflowStack extends cdk.Stack {
         })
       );
 
-      // EventBridge Access
+
       searchCutWorkflowFunction.addToRolePolicy(
           new iam.PolicyStatement({
               actions: ["events:PutEvents"],

@@ -3,7 +3,7 @@ import boto3
 import os
 
 # Initialize Lambda Client
-target_region = os.environ.get('TARGET_REGION', 'us-east-2')
+target_region = os.environ.get('TARGET_REGION', 'us-east-1')
 lambda_client = boto3.client('lambda', region_name=target_region)
 SEARCH_CUT_WORKFLOW_FUNCTION_ARN = os.environ.get('SEARCH_CUT_WORKFLOW_FUNCTION_ARN')
 
