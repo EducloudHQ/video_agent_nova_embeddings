@@ -30,6 +30,9 @@ export const handler = async (event: any, _context: any) => {
 
     logger.info(`Starting Step Functions execution for ${bucketName}/${key}`, { input });
 
+    // TODO: (Exercise 8) Trigger the Step Functions State Machine
+    // Hint: Use StartExecutionCommand from @aws-sdk/client-sfn with stateMachineArn and input
+    /*
     try {
       const command = new StartExecutionCommand({
         stateMachineArn: generateEmbeddingsSMArn,
@@ -39,8 +42,8 @@ export const handler = async (event: any, _context: any) => {
       logger.info(`Successfully started execution for ${bucketName}/${key}`);
     } catch (error: any) {
       logger.error("Error starting Step Functions execution", { error, bucketName, key });
-      // Continue processing other records even if one fails
     }
+    */
   }
 
   return true;

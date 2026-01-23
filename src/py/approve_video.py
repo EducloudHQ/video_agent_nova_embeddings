@@ -27,28 +27,13 @@ def handler(event, context):
                 "message": message,
                 "callback_id": callback_id,
             })
-            print(f"Sending success callback for {callback_id}")
-            try:
-                lambda_client.send_durable_execution_callback_success(
-                    CallbackId=callback_id,
-                    Result=payload
-                )
-            except Exception as e:
-                print(f"Error sending success callback (possibly feature not available): {e}")
-                # We still return True if the callback fails but the logic reached here? 
-                # Or maybe False? Let's return True for now to avoid null.
+            # TODO: (Exercise 12) Send success callback to the Durable Execution engine
+            # Hint: Use lambda_client.send_durable_execution_callback_success
+            print(f"Would send success callback for {callback_id}")
         else:
-            print(f"Sending failure callback for {callback_id}")
-            try:
-                lambda_client.send_durable_execution_callback_failure(
-                    CallbackId=callback_id,
-                    Error={
-                        'ErrorMessage': f"Video rejected with status: {status}",
-                        'ErrorType': "VideoRejected"
-                    }
-                )
-            except Exception as e:
-                print(f"Error sending failure callback: {e}")
+            # TODO: (Exercise 12) Send failure callback to the Durable Execution engine
+            # Hint: Use lambda_client.send_durable_execution_callback_failure
+            print(f"Would send failure callback for {callback_id}")
                 
         return True
     

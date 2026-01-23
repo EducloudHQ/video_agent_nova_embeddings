@@ -55,14 +55,18 @@ export class SearchWorkflowStack extends cdk.Stack {
     });
 
  
-     // Create version and alias
-    const version = searchCutWorkflowFunction.currentVersion;
-    const alias = new lambda.Alias(this, 'ProdAlias', {
-      aliasName: 'prod',
-      version: version,
-    });
-
+       // TODO: (Exercise 9) Create a Lambda Version and Alias for the search function
+       // Hint: AWS Durable Execution requires a specific version/alias for checkpointing to work.
+       // Create a version and an alias named 'prod'.
+       /*
+       const version = searchCutWorkflowFunction.currentVersion;
+       const alias = new lambda.Alias(this, 'ProdAlias', {
+         aliasName: 'prod',
+         version: version,
+       });
        this.searchCutWorkflowFunctionArn = alias.functionArn;
+       */
+       this.searchCutWorkflowFunctionArn = searchCutWorkflowFunction.functionArn; // Placeholder
 
 
 

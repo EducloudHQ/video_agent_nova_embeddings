@@ -286,11 +286,15 @@ export class AppSyncConstruct extends Construct {
           }
         `,
         variables: events.RuleTargetInput.fromObject({
+          // TODO: (Exercise 10) Map EventBridge detail fields to GraphQL mutation variables
+          // Hint: Map 'requestId', 'status', 'message', 'callbackId', and 'videoUrl' from the event detail
+          /*
           requestId: events.EventField.fromPath("$.detail.requestId"),
           status: events.EventField.fromPath("$.detail.status"),
           message: events.EventField.fromPath("$.detail.message"),
           callbackId: events.EventField.fromPath("$.detail.callbackId"),
           videoUrl: events.EventField.fromPath("$.detail.videoUrl"),
+          */
         }),
         eventRole: appSyncEventBridgeRole,
       })

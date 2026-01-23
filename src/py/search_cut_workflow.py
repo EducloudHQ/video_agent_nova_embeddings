@@ -70,33 +70,15 @@ def search_video_step(step_context: StepContext, query: str) -> dict:
     """
     step_context.logger.info(f"Searching for: {query}")
     
-    # 1. Embed Query
-    request_body = {
-        "taskType": "SINGLE_EMBEDDING",
-        "singleEmbeddingParams": {
-            "embeddingPurpose": "VIDEO_RETRIEVAL",
-            "embeddingDimension": VECTOR_DIMENSION,
-            "text": {"truncationMode": "NONE", "value": query},
-        },
-    }
-    
-    response = bedrock_runtime.invoke_model(
-        modelId='amazon.nova-2-multimodal-embeddings-v1:0', 
-        body=json.dumps(request_body),
-        accept="application/json",
-        contentType="application/json",
-    )
-    query_embedding = json.loads(response.get('body').read())['embeddings'][0]['embedding']
+    # TODO: (Exercise 5) Embed the user query using Bedrock Nova Multimodal Embeddings
+    # Hint: Use bedrock_runtime.invoke_model with 'amazon.nova-2-multimodal-embeddings-v1:0'
+    # query_embedding = ...
+    query_embedding = [0.0] * VECTOR_DIMENSION # Placeholder
 
-    # 2. Search Vector Index
-    search_response = s3_vectors.query_vectors(
-        vectorBucketName=VECTOR_BUCKET_NAME,
-        indexName=VECTOR_INDEX_NAME,
-        queryVector={'float32': query_embedding},
-        topK=1,
-        returnMetadata=True,
-        returnDistance=True
-    )
+    # TODO: (Exercise 6) Query the S3 Vector Index
+    # Hint: Use s3_vectors.query_vectors with query_embedding and topK=1
+    # search_response = ...
+    search_response = {} # Placeholder
 
     step_context.logger.info(f"Search response: {search_response}")
 
@@ -151,16 +133,13 @@ def cut_video_step(step_context: StepContext, match_data: dict, request_id: str)
         # 1. Download
         s3_client.download_file(bucket, key, input_path)
         
-        # 2. Cut with FFmpeg
-        command = [
-            "/opt/bin/ffmpeg",
-            "-ss", str(match_data['start_time']),
-            "-i", input_path,
-            "-to", str(match_data['end_time']),
-            "-c", "copy", # Fast cut
-            "-y",
-            output_path
-        ]
+        # TODO: (Exercise 7) Construct the FFmpeg command to cut the video
+        # Hint: Use -ss for start_time, -i for input_path, -to for end_time, and -c copy for fast cutting
+        command = [] # Placeholder
+        # command = [
+        #     "/opt/bin/ffmpeg",
+        #     ...
+        # ]
         subprocess.check_call(command)
         
         # 3. Upload Cut
@@ -213,27 +192,15 @@ def lambda_handler(event: dict, context: DurableContext) -> dict:
             config=StepConfig(retry_strategy=create_retry_strategy(retry_config))
         )
         
-        # --- PHASE 3: HUMAN APPROVAL ---
-        # Create a callback token (valid for 24 hours)
-        callback = context.create_callback(
-            name="user-approval",
-            config=CallbackConfig(timeout=Duration.from_hours(24))
-        )
+        # TODO: (Exercise 11) Create a Durable Execution callback for human approval
+        # Hint: Create a callback named 'user-approval' with a 24-hour timeout.
+        # Then, send a 'WAITING_FOR_APPROVAL' event and wait for the result.
         
-        # CRITICAL: Send the Presigned URL + Callback ID to the frontend/user
-        send_event(
-            request_id=request_id, 
-            status="WAITING_FOR_APPROVAL", 
-            callback_id=callback.callback_id,
-            video_url=cut_result['presigned_url'],
-            message="Clip ready. Please approve."
-        )
+        # callback = ...
+        # send_event(request_id=request_id, status="WAITING_FOR_APPROVAL", ...)
+        # approval_result = callback.result()
         
-        context.logger.info(f"Waiting for approval on callback: {callback.callback_id}")
-        
-        # Pause execution here until external API calls SendTaskSuccess
-        approval_result = callback.result() 
-        
+        approval_result = {"action": "approve"} # Placeholder for dev        
         # Defensive parsing
         if isinstance(approval_result, str):
             try:
